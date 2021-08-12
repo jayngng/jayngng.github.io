@@ -1,0 +1,24 @@
+[
+  
+    {
+      "title"    : "test2",
+      "tags"     : "tag1, tag2, tag3",
+      "url"     : "/blog/test2/",
+      "date"     : "3/10/2019"
+    } ,
+  
+    {
+      "title"    : "test",
+      "tags"     : "tag1, tag2, tag3",
+      "url"     : "/blog/test/",
+      "date"     : "3/10/2019"
+    } ,
+  
+    {
+      "title"    : "Welcome to Jekyll!",
+      "tags"     : "example, welcome, jekyll, typing",
+      "url"     : "/blog/welcome-to-jekyll/",
+      "date"     : "3/10/2019"
+    } 
+  
+]
