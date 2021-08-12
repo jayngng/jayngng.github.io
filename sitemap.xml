@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://jayngng.github.io/ctf/welcome-to-jekyll/</loc>
+<loc>https://jayngng.github.io/blog/welcome-to-jekyll/</loc>
+<lastmod>2019-10-03T23:22:16+10:00</lastmod>
+</url>
+<url>
+<loc>https://jayngng.github.io/blog/test/</loc>
 <lastmod>2019-10-03T23:22:16+10:00</lastmod>
 </url>
 <url>
@@ -20,6 +24,12 @@
 <loc>https://jayngng.github.io/resume/</loc>
 </url>
 <url>
+<loc>https://jayngng.github.io/blog/search/</loc>
+</url>
+<url>
+<loc>https://jayngng.github.io/blog/tags/</loc>
+</url>
+<url>
 <loc>https://jayngng.github.io/blog/tags/example/</loc>
 </url>
 <url>
@@ -30,5 +40,14 @@
 </url>
 <url>
 <loc>https://jayngng.github.io/blog/tags/typing/</loc>
+</url>
+<url>
+<loc>https://jayngng.github.io/blog/tags/tag1/</loc>
+</url>
+<url>
+<loc>https://jayngng.github.io/blog/tags/tag2/</loc>
+</url>
+<url>
+<loc>https://jayngng.github.io/blog/tags/tag3/</loc>
 </url>
 </urlset>
