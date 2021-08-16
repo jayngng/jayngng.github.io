@@ -1,0 +1,31 @@
+[
+  
+    {
+      "title"    : "Splunk - Introduction",
+      "tags"     : "splunk, siem, soc",
+      "url"     : "/blog/splunk-introduction/",
+      "date"     : "17/8/2021"
+    } ,
+  
+    {
+      "title"    : "Zino - OSPG",
+      "tags"     : "pg, zino, linux",
+      "url"     : "/blog/zino-ospg/",
+      "date"     : "16/8/2021"
+    } ,
+  
+    {
+      "title"    : "Quackerjack - OSPG",
+      "tags"     : "pg, ctf, linux",
+      "url"     : "/blog/quackerjack-ospg/",
+      "date"     : "15/8/2021"
+    } ,
+  
+    {
+      "title"    : "G00g - OSPG",
+      "tags"     : "pg, goog, linux",
+      "url"     : "/blog/g00g-ospg/",
+      "date"     : "14/8/2021"
+    } 
+  
+]
