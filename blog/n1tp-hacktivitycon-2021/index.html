@@ -1,0 +1,107 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width,initial-scale=1"><title>N1TP - H@acktivityCon 2021 | Infomation Security - Blog</title><meta name="description" content="Description
+    "><meta http-equiv="cache-control" content="max-age=29030400"><meta http-equiv="pragma" content="public"><meta name="keywords" content=""><meta name="author" content="Jay Nguyen"><meta http-equiv="Content-Language" content="en"><meta property="og:locale" content="en"><meta property="og:site_name" content="Infomation Security"><meta property="og:type" content="WebSite"><meta property="og:url" content="https://jayngng.github.io/blog/n1tp-hacktivitycon-2021/"><meta property="og:description" content="
+    Blog"><meta property="og:title" content="N1TP - H@acktivityCon 2021
+  "><link rel="canonical" href="https://jayngng.github.io/blog/n1tp-hacktivitycon-2021/"><link type="application/atom+xml" rel="alternate" title="Infomation Security" href="https://jayngng.github.io/feed.xml"><link rel="icon" type="image/png" sizes="32x32" href="https://jayngng.github.io/assets/images/favicon/favicon-32x32.png"><link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet"><script defer="defer" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script><link rel="stylesheet" href="https://jayngng.github.io/assets/css/bootstrap.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/jektify.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/whiteglass.css"></head><body class="body underline_links" id="top"><div class="container layout_default"><div class="row"><div class="col-lg-3 px-0 mt-0 sidebar"><div class="py-3 sticky-top flex-grow-1"><div class="pt-3 sidebar__wrapper"><div class="nav flex-lg-column mx-3 mx-lg-0"><div class="d-none d-sm-block sidebar__avatar_flip"><div class="sidebar__avatar_flip-card"><a class="sidebar__avatar_flip-front sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/author.jpg" alt="Avatar"> </a><a class="sidebar__avatar_flip-back sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/athor_m.png" alt="Avatar"></a></div></div><h1 class="p-2 text-center d-md-flex align-items-center mx-auto animation__sidebar-title sidebar__title"><a href="https://jayngng.github.io/" class="nav-link" style="font-size: 2.3rem">whoami</a></h1><div class="p-2 mx-3 d-md-flex flex-md-column align-items-md-start align-items-center align-items-lg-start flex-lg-column mx-auto mr-lg-3 ml-lg-3 sidebar__menu animation__sidebar-menu"><div class="my-1 d-none d-md-block mr-3 sidebar__menu-title">Menu: Blog</div><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-edit"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/">Blog</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-tags"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/tags/">Tags</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-search"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/search/">Search</a></li></div></div></div></div></div><div class="col-lg-9 p-0 py-4 content" id="main"><div class="px-3 mt-lg-0 layout_post animation__content" itemscope itemtype="http://schema.org/BlogPosting"><div class="p-0 p-lg-3 mb-4 layout_post__header"><h1 class="font-weight-bold layout_post__title">N1TP - H@acktivityCon 2021</h1><div class="layout_post__date"><time class="layout_post__time"><i class="far fa-calendar-alt"></i> September 18, 2021</time></div><div class="layout_post__tags"><i class="fa fa-tags"></i>&nbsp;Tags:&nbsp; | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//cryptography">cryptography</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//ctf">ctf</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//challenge">challenge</a> |</div><div class="layout_post__reading_time"><i class="far fa-clock"></i> Read this in "about 6 minutes".</div></div><div class="p-0 p-lg-3 mb-4 layout_post__content"><div class="d-block"><div class="py-3 row"><div class="offset-6 col-6 offset-sm-9 col-sm-3 offset-lg-10 col-lg-2"></div></div><h2 id="description"><strong>Description</strong></h2><p><strong>Author:</strong> @JohnHammond#6971</p><p>Nina found some new encryption scheme that she apparently thinks is really cool. She’s annoying but she found a flag or something, can you deal with her?</p><p>Press the Start button on the top-right to begin this challenge. Connect with:</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc challenge.ctf.games 31921
+</code></pre></div></div><h2 id="solution"><strong>Solution</strong></h2><p>Let’s us connect to the challenge.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>nc challenge.ctf.games 31921
+NINA: Hello! I found a flag, look!
+      735097cf4ed3df93068d2add1690730965903232b06b7e97460999586cdf4def6d036ba9e2ea
+NINA: But I encrypted it with a very special nonce, the same length as 
+      the flag! I heard people say this encryption method is unbreakable!
+      I<span class="s1">'ll even let you encrypt something to prove it!! What should we encrypt?
+&gt; Hello NINAAA
+NINA: Ta-daaa!! I think this is called a '</span>one<span class="s1">' '</span><span class="nb">time</span><span class="s1">' '</span>pad<span class="s1">' or something?
+      5d599ac45acaa3ed7eaf0ffe69c37e566ed44a19cf4c0ae43d5ec50d609b3ac513231bd9c8f2
+NINA: Isn'</span>t that cool!?! Want to see it again? 
+      Sorry, I forget already <span class="nt">--</span> what was it you wanted to see again?
+<span class="o">&gt;</span> THIS IS ME ...
+NINA: Ta-daaa!! I think this is called a <span class="s1">'one'</span> <span class="s1">'time'</span> <span class="s1">'pad'</span> or something?
+      4174bffb15a3be847dab6e910f88467248a72419d22d06e05515874f5bf33ddf7d2b09b8cdd2
+NINA: Isn<span class="s1">'t that cool!?! Want to see it again? 
+      Sorry, I forget already -- what was it you wanted to see again?
+&gt; HOW ARE YOU DOING
+NINA: Ta-daaa!! I think this is called a '</span>one<span class="s1">' '</span><span class="nb">time</span><span class="s1">' '</span>pad<span class="s1">' or something?
+      5d73a18874b8a88469a11b9f65e95b7446bc4b07a14c19e05562e6342fff3bc5132512d7d7b7
+NINA: Isn'</span>t that cool!?! Want to see it again? 
+      Sorry, I forget already <span class="nt">--</span> what was it you wanted to see again?
+</code></pre></div></div><p>In the very first line, Nina sent us a encrypted flag using <code class="language-plaintext highlighter-rouge">one</code> <code class="language-plaintext highlighter-rouge">time</code> <code class="language-plaintext highlighter-rouge">pad</code>. Now everytime we sent a message, Nina takes our message, encrypts it and sends it back to us.</p><p>Our theory is Nina reuses a same key for message encryption. This is also called <strong>Many Time Pad Attack</strong>.</p><ul><li>Source: <a href="http://travisdazell.blogspot.com/2012/11/many-time-pad-attack-crib-drag.html">Many Time Pad Attack.</a></li></ul><p><strong>To attack the encryption, we follow the below steps:</strong></p><ol><li>Guess a word that might appear in one of the messages</li><li>Encode the word from step 1 to a hex string</li><li>XOR the two cipher-text messages</li><li>XOR the hex string from step 2 at each position of the XOR of the two cipher-texts (from step 3)</li><li>When the result from step 4 is readable text, we guess the English word and expand our crib search. + If the result is not readable text, we try an XOR of the crib word at the next position.</li></ol><p>The following <code class="language-plaintext highlighter-rouge">python</code> script can automatically do the job. (I couldn’t remember where the source is).</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/usr/bin/env python </span>
+import string
+import collections
+import sets
+
+<span class="c"># XORs two string</span>
+def strxor<span class="o">(</span>a, b<span class="o">)</span>:     <span class="c"># xor two strings (trims the longer input)</span>
+    <span class="k">return</span> <span class="s2">""</span>.join<span class="o">([</span>chr<span class="o">(</span>ord<span class="o">(</span>x<span class="o">)</span> ^ ord<span class="o">(</span>y<span class="o">))</span> <span class="k">for</span> <span class="o">(</span>x, y<span class="o">)</span> <span class="k">in </span>zip<span class="o">(</span>a, b<span class="o">)])</span>
+
+<span class="c"># 10 unknown ciphertexts (in hex format), all encrpyted with the same key</span>
+c1 <span class="o">=</span> <span class="s2">"1a3a20741ca737cb76cb0e33909bb16bc0dd5cd150c14babcf505f6473b6615f8bd0963a04c4"</span>
+c2 <span class="o">=</span> <span class="s2">"23343e651ca7308a718e0260d981fe7e87df5ad06b8044abcf455c2820bd6d118384c63710852a3238651cb5348a62"</span>
+c3 <span class="o">=</span> <span class="s2">"3a332b7259f3319825c312339f83f06d87d515de6a8052be8650592a67f362109084df2f43cb24352f204cbf2bcb62c71d76d982f42aded340cd27c649be880459646eb6611bc2cdc27b17ca6d283b6251ba2ccb63c11933918ef261d3d543d664cf4b"</span>
+c4 <span class="o">=</span> <span class="s2">"34343b204fbb379e69ca4b7d969bb178c2c946da27d44dbacf4f553d20b56b0dc2cbd83e43d124362b204cb23ccb6bc70572"</span>
+c5 <span class="o">=</span> <span class="s2">"272e3d741cb4319d608e0676d99bf96f87da59de60ca50ac9b04572d76b624128784c2330685"</span>
+c6 <span class="o">=</span> <span class="s2">"247b396152a7788a25c807729e86b17dc6d2419f668043b38e43596477b26a0bc2c5963d0fc4"</span>
+c7 <span class="o">=</span> <span class="s2">"25352b7755b22d8d6bcc0f60958efb61d0d95ed561ce41ac84485e2573a97c1c9adede3506d2"</span>
+c8 <span class="o">=</span> <span class="s2">"247b2f6d1ca4398271c70574d989fe7887c85dda27c649be884d10256df3731e8bd0df350485"</span>
+c9 <span class="o">=</span> <span class="s2">"3a332f741ca4399825c71f338080e42ad0dd5bcb62c405ab8004432165f3651883cdd82c0bc4"</span>
+c10 <span class="o">=</span> <span class="s2">"047b286f4eb43d9f25cf07619c8ef573ee9c53d075c740abcf455c3665b26006ab84d03411c2"</span>
+
+
+ciphers <span class="o">=</span> <span class="o">[</span>c1, c2, c3, c4, c5, c6, c7, c8, c9, c10]
+<span class="c"># The target ciphertext we want to crack</span>
+target_cipher <span class="o">=</span> <span class="s2">"2b372f6747ea6adc33cd0f71ced9f039c3d803dd36c610eddc16007d63b73d1cd2c5876a01d8"</span>
+
+<span class="c"># To store the final key</span>
+final_key <span class="o">=</span> <span class="o">[</span>None]<span class="k">*</span>150
+<span class="c"># To store the positions we know are broken</span>
+known_key_positions <span class="o">=</span> <span class="nb">set</span><span class="o">()</span>
+
+<span class="c"># For each ciphertext</span>
+<span class="k">for </span>current_index, ciphertext <span class="k">in </span>enumerate<span class="o">(</span>ciphers<span class="o">)</span>:
+
+	counter <span class="o">=</span> collections.Counter<span class="o">()</span>
+	<span class="c"># for each other ciphertext</span>
+	<span class="k">for </span>index, ciphertext2 <span class="k">in </span>enumerate<span class="o">(</span>ciphers<span class="o">)</span>:
+		<span class="k">if </span>current_index <span class="o">!=</span> index: <span class="c"># don't xor a ciphertext with itself</span>
+			<span class="k">for </span>indexOfChar, char <span class="k">in </span>enumerate<span class="o">(</span>strxor<span class="o">(</span>ciphertext.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>, ciphertext2.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)))</span>: <span class="c"># Xor the two ciphertexts</span>
+				<span class="c"># If a character in the xored result is a alphanumeric character, it means there was probably a space character in one of the plaintexts (we don't know which one)</span>
+				<span class="k">if </span>char <span class="k">in </span>string.printable and char.isalpha<span class="o">()</span>: counter[indexOfChar] +<span class="o">=</span> 1 <span class="c"># Increment the counter at this index</span>
+	knownSpaceIndexes <span class="o">=</span> <span class="o">[]</span>
+
+	<span class="c"># Loop through all positions where a space character was possible in the current_index cipher</span>
+	<span class="k">for </span>ind, val <span class="k">in </span>counter.items<span class="o">()</span>:
+		<span class="c"># If a space was found at least 7 times at this index out of the 9 possible XORS, then the space character was likely from the current_index cipher!</span>
+		<span class="k">if </span>val <span class="o">&gt;=</span> 7: knownSpaceIndexes.append<span class="o">(</span>ind<span class="o">)</span>
+	<span class="c">#print knownSpaceIndexes # Shows all the positions where we now know the key!</span>
+
+	<span class="c"># Now Xor the current_index with spaces, and at the knownSpaceIndexes positions we get the key back!</span>
+	xor_with_spaces <span class="o">=</span> strxor<span class="o">(</span>ciphertext.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>,<span class="s1">' '</span><span class="k">*</span>150<span class="o">)</span>
+	<span class="k">for </span>index <span class="k">in </span>knownSpaceIndexes:
+		<span class="c"># Store the key's value at the correct position</span>
+		final_key[index] <span class="o">=</span> xor_with_spaces[index].encode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>
+		<span class="c"># Record that we known the key at this position</span>
+		known_key_positions.add<span class="o">(</span>index<span class="o">)</span>
+
+<span class="c"># Construct a hex key from the currently known key, adding in '00' hex chars where we do not know (to make a complete hex string)</span>
+final_key_hex <span class="o">=</span> <span class="s1">''</span>.join<span class="o">([</span>val <span class="k">if </span>val is not None <span class="k">else</span> <span class="s1">'00'</span> <span class="k">for </span>val <span class="k">in </span>final_key]<span class="o">)</span>
+<span class="c"># Xor the currently known key with the target cipher</span>
+output <span class="o">=</span> strxor<span class="o">(</span>target_cipher.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>,final_key_hex.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">))</span>
+<span class="c"># Print the output, printing a * if that character is not known yet</span>
+print <span class="s1">''</span>.join<span class="o">([</span>char <span class="k">if </span>index <span class="k">in </span>known_key_positions <span class="k">else</span> <span class="s1">'*'</span> <span class="k">for </span>index, char <span class="k">in </span>enumerate<span class="o">(</span>output<span class="o">)])</span>
+
+<span class="s1">'''
+Manual step
+'''</span>
+<span class="c"># From the output this prints, we can manually complete the target plaintext from:</span>
+<span class="c"># The secuet-mes*age*is: Wh** usi|g **str*am cipher, nev***use th* k*y *ore than onc*</span>
+<span class="c"># to:</span>
+<span class="c"># The secret message is: When using a stream cipher, never use the key more than once</span>
+
+<span class="c"># We then confirm this is correct by producing the key from this, and decrpyting all the other messages to ensure they make grammatical sense</span>
+target_plaintext <span class="o">=</span> <span class="s2">"b76a3dd6b1f523209cd9c0a11b}"</span>
+print target_plaintext
+key <span class="o">=</span> strxor<span class="o">(</span>target_cipher.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>,target_plaintext<span class="o">)</span>
+<span class="k">for </span>cipher <span class="k">in </span>ciphers:
+	print strxor<span class="o">(</span>cipher.decode<span class="o">(</span><span class="s1">'hex'</span><span class="o">)</span>,key<span class="o">)</span>
+</code></pre></div></div><p>By running the script, we can partially obtain the flag.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python2 attack.py                                                                                                                                                                     1 ⨯
+<span class="k">*</span>l<span class="k">*</span>g<span class="k">*</span>927<span class="k">*</span>cdb7<span class="k">*</span>a3<span class="k">*</span>d6b1f5<span class="k">**</span>209cd9c0<span class="k">*</span>1<span class="k">*</span>b<span class="o">}</span>
+...
+</code></pre></div></div><p>Keep rotating the cipher texts (c1,c2,c3,c4,c5 …). After a few times, we should be able to recover all parts of the flag.</p><p><br></p><center><script src="https://tryhackme.com/badge/44696"></script></center></div></div><div class="p-0 p-lg-3 mb-4 layout_post__footer"></div></div></div></div></div><div class="py-1 position-fixed fixed-bottom w-100 footer"><div class="container-fluid"><div class="row"><div class="text-center col-12 col-md-4"><span class="footer__copyright">Infomation Security © 2021-2023 • All right reserved.</span></div><div class="text-center col-12 col-md-4 d-none d-md-block"><span class="footer__message">Simplicity is fashionable.</span></div><div class="text-center col-12 col-md-4"><span class="footer__madeby">Made with&nbsp;<a href="https://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;using&nbsp;<a href="https://github.com/williamcanin/typing-jekyll-template" target="_blank">Typing</a>&nbsp;Theme.</span></div></div></div></div><div class="d-block d-lg-none position-fixed fixed-bottom w-100 scrolltop"><div class="float-right mr-3 scrolltop__wrapper"><a class="mr-3 scrolltop__button" href="#top"><i class="fas fa-caret-up"></i></a></div></div><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/jquery.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/popper.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/bootstrap.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/simple-jekyll-search.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/global.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/post.js"></script><script src="https://jayngng.github.io/assets/vendor/jektify/js/jektify.min.js"></script></body><script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script></html>
