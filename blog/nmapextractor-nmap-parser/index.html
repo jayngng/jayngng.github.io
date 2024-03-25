@@ -1,0 +1,97 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta name="viewport" content="width=device-width,initial-scale=1"><title>nmapextractor - A nmap parser | Infomation Security - Blog</title><meta name="description" content="General Informationnmapextractor is a small project written in Ruby with the purposes of:
+    "><meta http-equiv="cache-control" content="max-age=29030400"><meta http-equiv="pragma" content="public"><meta name="keywords" content=""><meta name="author" content="Cuong (Jay) Nguyen"><meta http-equiv="Content-Language" content="en"><meta property="og:locale" content="en"><meta property="og:site_name" content="Infomation Security"><meta property="og:type" content="WebSite"><meta property="og:url" content="https://jayngng.github.io/blog/nmapextractor-nmap-parser/"><meta property="og:description" content="
+    Blog"><meta property="og:title" content="nmapextractor - A nmap parser
+  "><link rel="canonical" href="https://jayngng.github.io/blog/nmapextractor-nmap-parser/"><link type="application/atom+xml" rel="alternate" title="Infomation Security" href="https://jayngng.github.io/feed.xml"><link rel="icon" type="image/png" sizes="32x32" href="https://jayngng.github.io/assets/images/favicon/favicon-32x32.png"><link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet"><script defer="defer" src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script><link rel="stylesheet" href="https://jayngng.github.io/assets/css/bootstrap.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/jektify.css"><link rel="stylesheet" href="https://jayngng.github.io/assets/css/whiteglass.css"></head><body class="body underline_links" id="top"><div class="container layout_default"><div class="row"><div class="col-lg-3 px-0 mt-0 sidebar"><div class="py-3 sticky-top flex-grow-1"><div class="pt-3 sidebar__wrapper"><div class="nav flex-lg-column mx-3 mx-lg-0"><div class="d-none d-sm-block sidebar__avatar_flip"><div class="sidebar__avatar_flip-card"><a class="sidebar__avatar_flip-front sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/author.jpg" alt="Avatar"> </a><a class="sidebar__avatar_flip-back sidebar__avatar_flip-face" href="https://jayngng.github.io/"><img class="p-1 img-fluid mx-auto d-block animation__pulse sidebar_avatar_circle sidebar_avatar_background sidebar_avatar_border image_avatar" src="/assets/images/avatar/athor_m.png" alt="Avatar"></a></div></div><h1 class="p-2 text-center d-md-flex align-items-center mx-auto animation__sidebar-title sidebar__title"><a href="https://jayngng.github.io/" class="nav-link" style="font-size: 2.3rem">Home</a></h1><div class="p-2 mx-3 d-md-flex flex-md-column align-items-md-start align-items-center align-items-lg-start flex-lg-column mx-auto mr-lg-3 ml-lg-3 sidebar__menu animation__sidebar-menu"><div class="my-1 d-none d-md-block mr-3 sidebar__menu-title">Menu: Blog</div><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-edit"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/">Blog</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-tags"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/tags/">Tags</a></li><li class="mr-3 mr-lg-0 float-left float-lg-none sidebar__menu-item"><i class="mr-1 fas fa-search"></i> <a class="sidebar__menu-link" href="https://jayngng.github.io/blog/search/">Search</a></li></div></div></div></div></div><div class="col-lg-9 p-0 py-4 content" id="main"><div class="px-3 mt-lg-0 layout_post animation__content" itemscope itemtype="http://schema.org/BlogPosting"><div class="p-0 p-lg-3 mb-4 layout_post__header"><h1 class="font-weight-bold layout_post__title">nmapextractor - A nmap parser</h1><div class="layout_post__date"><time class="layout_post__time"><i class="far fa-calendar-alt"></i> August 29, 2021</time></div><div class="layout_post__tags"><i class="fa fa-tags"></i>&nbsp;Tags:&nbsp; | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//enumerator">enumerator</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//red">red</a> | <a class="layout_post__tags-link" href="https://jayngng.github.io/blog/tags//nmap">nmap</a> |</div><div class="layout_post__reading_time"><i class="far fa-clock"></i> Read this in "about 4 minutes".</div></div><div class="p-0 p-lg-3 mb-4 layout_post__content"><div class="d-block"><div class="py-3 row"><div class="offset-6 col-6 offset-sm-9 col-sm-3 offset-lg-10 col-lg-2"></div></div><h1 id="general-information"><strong>General Information</strong></h1><p><code class="language-plaintext highlighter-rouge">nmapextractor</code> is a small project written in Ruby with the purposes of:</p><ul><li>Inspecting <em>alive hosts</em> from either <code class="language-plaintext highlighter-rouge">nmap</code> files or <code class="language-plaintext highlighter-rouge">nmap</code> stream utilizing <code class="language-plaintext highlighter-rouge">ipextractor</code>.</li><li>Parsing <em>opened ports</em> of an <em>alive host</em> from either <code class="language-plaintext highlighter-rouge">nmap</code> files or <code class="language-plaintext highlighter-rouge">nmap</code> stream utilizing <code class="language-plaintext highlighter-rouge">pextractor</code>.</li></ul><p>Download <a href="https://github.com/jayngng/nmapextractor">here.</a></p><p>Let’s us demonstrate some feasibilities of the tools <code class="language-plaintext highlighter-rouge">ipextractor</code> and <code class="language-plaintext highlighter-rouge">pextractor</code>.</p><p><br></p><h1 id="1-ipextractor---ip-extractor"><strong>1. <code class="language-plaintext highlighter-rouge">ipextractor</code> - IP Extractor</strong></h1><h4 id="general-information-1"><strong>General information</strong></h4><p><code class="language-plaintext highlighter-rouge">ipextractor</code> is employed to inspect alive hosts, it supports all <code class="language-plaintext highlighter-rouge">nmap</code> file types and <code class="language-plaintext highlighter-rouge">nmap</code> stream.</p><ul><li>Help menu</li></ul><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ipextractor
+ipextractor - A nmap parsing tool
+
+It is used to extract alive hosts <span class="k">in </span>a nmap file.
+
+Usage: ipextractor &lt;File Type&gt; &lt;Nmap File&gt;|&lt;Nmap Stream&gt;
+
+FILE TYPES:
+ <span class="nt">-oX</span> is xml nmap output. 
+ <span class="nt">-oN</span> is nmap output. 
+ <span class="nt">-oG</span> is grepable nmap output.
+    
+NOTE: 
+<span class="o">[</span>FILE TYPE] is NOT required when file has 
+ .nmap | .xml | .gnmap extension
+
+
+EXAMPLES:
+ ipextractor hosts.nmap
+ ipextractor <span class="nt">-oX</span> nmap_xml
+ ipextractor <span class="nt">-oN</span> nmap_scan.nmap
+ nmap <span class="nt">-PE</span> <span class="nt">-sn</span> <span class="nt">-n</span> 192.168.0.0/24 <span class="nt">-oG</span> - | ipextractor <span class="nt">-oG</span>
+</code></pre></div></div><h4 id="example"><strong>Example</strong></h4><ul><li><strong>Read <code class="language-plaintext highlighter-rouge">nmap</code> grepable file.</strong><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ipextractor nmap/scan.gnmap 
+172.16.10.1
+172.16.10.11
+172.16.10.19
+172.16.10.20
+172.16.10.37
+</code></pre></div></div></li></ul><p>Similarly, we can also parse <code class="language-plaintext highlighter-rouge">.nmap</code> and <code class="language-plaintext highlighter-rouge">.xml</code> file:</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ipextractor nmap/scan.xml
+172.16.10.1
+172.16.10.11
+172.16.10.19
+172.16.10.20
+172.16.10.37
+</code></pre></div></div><p><br></p><ul><li><strong>Read <code class="language-plaintext highlighter-rouge">nmap</code> from stream.</strong><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>nmap <span class="nt">-PE</span> <span class="nt">-sn</span> <span class="nt">-n</span> 172.16.10.0/24 <span class="nt">-oN</span> - | ipextractor <span class="nt">-oN</span>
+172.16.10.1
+172.16.10.11
+172.16.10.19
+172.16.10.20
+172.16.10.37
+</code></pre></div></div></li></ul><p>The switch <code class="language-plaintext highlighter-rouge">-oN</code> is an example, we can adjust it to be compatibe with other <code class="language-plaintext highlighter-rouge">nmap</code> file types, i.e. <code class="language-plaintext highlighter-rouge">-oX</code> or <code class="language-plaintext highlighter-rouge">-oG</code>.</p><p>For instance:</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>nmap <span class="nt">-PE</span> <span class="nt">-sn</span> <span class="nt">-n</span> 172.16.10.0/24 <span class="nt">-oG</span> - | ipextractor <span class="nt">-oG</span>
+172.16.10.1
+172.16.10.11
+172.16.10.19
+172.16.10.20
+172.16.10.37
+</code></pre></div></div><p><br></p><h1 id="2-pextractor---port-extractor"><strong>2. <code class="language-plaintext highlighter-rouge">pextractor</code> - Port Extractor.</strong></h1><p>Assuming that we employ <code class="language-plaintext highlighter-rouge">ipextractor</code> to retain a list of target hosts. <code class="language-plaintext highlighter-rouge">pextractor</code> is used to extract ports of a host.</p><ul><li>Help menu:</li></ul><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pextractor
+pextractor - A nmap parsing tool
+
+It is used to extract <span class="o">[</span>open | closed | filtered] ports <span class="k">in </span>a nmap file.
+
+Usage: pextractor &lt;IP&gt; &lt;Port State&gt; &lt;File Type&gt; &lt;Nmap File&gt;
+
+PORT STATES:
+ <span class="nt">-open</span>      is opened ports of a host <span class="o">(</span>default<span class="o">)</span><span class="nb">.</span>
+ <span class="nt">-closed</span>    is closed ports of a host.
+ <span class="nt">-filtered</span>  is filtered ports of a host.
+
+FILE TYPES:
+ <span class="nt">-oX</span> is xml nmap output. 
+ <span class="nt">-oN</span> is nmap output. 
+ <span class="nt">-oG</span> is grepable nmap output.
+           
+NOTE: 
+ <span class="o">[</span>FILE TYPE] is NOT required when file has 
+ .nmap | .xml | .gnmap extension
+
+
+EXAMPLES:
+ pextractor 192.168.0.20 ports.nmap
+ pextractor 192.168.0.20 <span class="nt">-oX</span> ports.xml
+ pextractor 192.168.0.20 <span class="nt">-filtered</span> nmap_scan.gnmap
+ nmap <span class="nt">-sS</span> 192.168.0.0/24 <span class="nt">-oG</span> - | pextractor 192.16.0.20 <span class="nt">-oG</span> 
+</code></pre></div></div><h4 id="example-1"><strong>Example</strong></h4><ul><li><strong>Read ports of a host from a <code class="language-plaintext highlighter-rouge">nmap</code> file.</strong></li></ul><p>The <strong>default port state</strong> is <code class="language-plaintext highlighter-rouge">open</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pextractor 172.16.10.20 nmap/scan.nmap 
+23
+135
+139
+445
+2869
+3389
+</code></pre></div></div><p>As we can imagine, it is possible to also read <code class="language-plaintext highlighter-rouge">.gnmap</code> and <code class="language-plaintext highlighter-rouge">.xml</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pextractor 172.16.10.37 nmap/scan.xml 
+135
+139
+1027
+</code></pre></div></div><p><br></p><ul><li><strong>Read ports of a <code class="language-plaintext highlighter-rouge">nmap</code> stream.</strong></li></ul><p>It’s feasible to parse result from a <code class="language-plaintext highlighter-rouge">nmap</code> stream with <code class="language-plaintext highlighter-rouge">pextractor</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>nmap <span class="nt">-sS</span> <span class="nt">-p80</span>,445,139,135,1027,443,53 <span class="nt">-iL</span> alive_hosts <span class="nt">-oN</span> - | pextractor 172.16.10.37 <span class="nt">-oN</span> 
+135
+139
+1027
+</code></pre></div></div><p>Besides <code class="language-plaintext highlighter-rouge">-oN</code> stream, we can read other streams i.e. <code class="language-plaintext highlighter-rouge">-oG</code> and <code class="language-plaintext highlighter-rouge">-oX</code>.</p><div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">sudo </span>nmap <span class="nt">-sS</span> <span class="nt">-p80</span>,445,139,135,1027,443,53 <span class="nt">-iL</span> alive_hosts <span class="nt">-oG</span> - | pextractor 172.16.10.37 <span class="nt">-closed</span> <span class="nt">-oG</span>
+53
+80
+443
+445
+</code></pre></div></div><p>The above command executes with a <code class="language-plaintext highlighter-rouge">-closed</code> switch, this tells <code class="language-plaintext highlighter-rouge">pextractor</code> to extract only the ports with a <code class="language-plaintext highlighter-rouge">closed</code> state.</p><p>That’s primarily everything about the tools and the project - a simple and relaxed project that helps to boost up the enumeration phase.</p><center><script src="https://tryhackme.com/badge/44696"></script></center></div></div><div class="p-0 p-lg-3 mb-4 layout_post__footer"></div></div></div></div></div><div class="py-1 position-fixed fixed-bottom w-100 footer"><div class="container-fluid"><div class="row"><div class="text-center col-12 col-md-4"><span class="footer__copyright">Infomation Security © 2021-2024 • All right reserved.</span></div><div class="text-center col-12 col-md-4 d-none d-md-block"><span class="footer__message">Simplicity is fashionable.</span></div><div class="text-center col-12 col-md-4"><span class="footer__madeby">Made with&nbsp;<a href="https://jekyllrb.com" target="_blank">Jekyll</a>&nbsp;using&nbsp;<a href="https://github.com/williamcanin/typing-jekyll-template" target="_blank">Typing</a>&nbsp;Theme.</span></div></div></div></div><div class="d-block d-lg-none position-fixed fixed-bottom w-100 scrolltop"><div class="float-right mr-3 scrolltop__wrapper"><a class="mr-3 scrolltop__button" href="#top"><i class="fas fa-caret-up"></i></a></div></div><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/jquery.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/popper.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/bootstrap.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/vendor/js/simple-jekyll-search.min.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/global.js"></script><script type="text/javascript" src="https://jayngng.github.io/assets/js/post.js"></script><script src="https://jayngng.github.io/assets/vendor/jektify/js/jektify.min.js"></script></body><script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script></html>
